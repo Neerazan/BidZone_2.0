@@ -130,7 +130,8 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(models.ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
-    list_display= ['product', 'image']
+    list_display = ['product', 'image']
+    search_fields = ['product__title']
 
 
 @admin.register(models.Wishlist)

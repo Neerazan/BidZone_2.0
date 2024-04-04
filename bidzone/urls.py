@@ -18,9 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 admin.site.site_header = 'BidZone Admin'
-admin.site.index_title = 'Admin'
+admin.site.index_title = 'Admin Panel'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auction/', include('auction.urls')),
+    path('slider/', include('slider.urls')),
     path("__debug__/", include("debug_toolbar.urls")),
 ]
