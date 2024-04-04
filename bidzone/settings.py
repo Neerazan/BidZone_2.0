@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'core',
     'auction',
     'playground',
-    'tags'
+    'tags',
+    'slider'
 ]
 
 MIDDLEWARE = [
