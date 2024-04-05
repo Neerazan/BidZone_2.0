@@ -12,7 +12,6 @@ class CollectionViewSet(ModelViewSet):
     serializer_class = CollectionSerializers
 
 
-
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()  
     serializer_class = ProductSerializers
