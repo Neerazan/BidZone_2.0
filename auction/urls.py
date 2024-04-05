@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework import routers
 from pprint import pprint
-from .views import ProductViewSet, CollectionViewSet, ReviewViewSet
+from .views import ProductViewSet, CollectionViewSet, ReviewViewSet, CustomerViewSet
 
 router = routers.DefaultRouter()
 router.register('product', ProductViewSet)
 router.register('collection', CollectionViewSet)
 router.register('review', ReviewViewSet)
+router.register('customer', CustomerViewSet)
 
 urlpatterns = [
     path('', include(router.urls))

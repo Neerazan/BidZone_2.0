@@ -3,8 +3,8 @@ from django.db.models.aggregates import Count
 from rest_framework import generics
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Collection, Product, Review
-from .serializers import CollectionSerializers, ProductSerializers, ReviewSerializers
+from .models import Collection, Product, Review, Customer
+from .serializers import CollectionSerializers, ProductSerializers, ReviewSerializers, CustomerSerializers
 
 
 class CollectionViewSet(ModelViewSet):
@@ -19,9 +19,13 @@ class ProductViewSet(ModelViewSet):
 
 
 class ReviewViewSet(ModelViewSet):
-    queryset = Review.objects.select_related('seller').all()
+    queryset = Review.objects.all()
     serializer_class = ReviewSerializers
 
+
+class CustomerViewSet(ModelViewSet):
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializers
 
 # class ProductList(APIView):
     #TODO: Optimize Query Problem
