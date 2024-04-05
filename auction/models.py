@@ -87,7 +87,7 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     description = models.TextField(null=True, blank=True)
-    seller = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     price = models.DecimalField(max_digits=10,
                                 decimal_places=2,
                                 validators=[MinValueValidator(Decimal(1))]
@@ -213,8 +213,8 @@ class Review(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def __str__(self):
-    #     return f"Review by {self.reviewer.user.get_username()} for {self.seller.user.get_username()}"
+    def __str__(self):
+        return f"Review by {self.reviewer.user.get_username()} for {self.seller.user.get_username()}"
 
 
 class Chat(models.Model):

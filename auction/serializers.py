@@ -12,26 +12,23 @@ class CollectionSerializers(serializers.ModelSerializer):
 
 
 class ProductSerializers(serializers.ModelSerializer):
+
+    customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'price_with_tax', 'seller']
-
-    price_with_tax = serializers.SerializerMethodField(
-        method_name='calculate_tax'
-    )
-
-    def calculate_tax(self, product: Product):
-        return product.price * Decimal(1.1)
-
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer']
 
 class ReviewSerializers(serializers.ModelSerializer):
+
+    seller = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
+    reviewer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     class Meta:
         model = Review
         fields = ['id', 'seller', 'reviewer', 'description', 'created_at']
 
 
 class CustomerSerializers(serializers.ModelSerializer):
+    user = UserSerializer()
     class Meta:
         model = Customer
         fields = ['id', 'first_name', 'last_name', 'phone', 'membership', 'user']
-    user = UserSerializer()

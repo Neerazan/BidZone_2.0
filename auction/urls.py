@@ -4,10 +4,10 @@ from pprint import pprint
 from .views import ProductViewSet, CollectionViewSet, ReviewViewSet, CustomerViewSet
 
 router = routers.DefaultRouter()
-router.register('product', ProductViewSet)
+router.register('product', ProductViewSet, basename='product')
 router.register('collection', CollectionViewSet)
 router.register('review', ReviewViewSet)
-router.register('customer', CustomerViewSet)
+router.register('customer', CustomerViewSet, basename='customer')
 
 urlpatterns = [
     path('', include(router.urls))

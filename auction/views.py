@@ -14,7 +14,7 @@ class CollectionViewSet(ModelViewSet):
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all()  
     serializer_class = ProductSerializers
 
 
@@ -24,7 +24,7 @@ class ReviewViewSet(ModelViewSet):
 
 
 class CustomerViewSet(ModelViewSet):
-    queryset = Customer.objects.all()
+    queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializers
 
 # class ProductList(APIView):
