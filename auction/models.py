@@ -207,14 +207,14 @@ class Delivery(models.Model):
 
 
 class Review(models.Model):
-    seller = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='reviews')
-    reviewer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    seller = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="received_reviews")
+    reviewer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="written_reviews")
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"Review by {self.reviewer.user.get_username()} for {self.seller.user.get_username()}"
+    # def __str__(self):
+    #     return f"Review by {self.reviewer.user.get_username()} for {self.seller.user.get_username()}"
 
 
 class Chat(models.Model):

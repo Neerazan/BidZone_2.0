@@ -3,8 +3,8 @@ from django.db.models.aggregates import Count
 from rest_framework import generics
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Collection, Product, Promotion
-from .serializers import CollectionSerializers, ProductSerializers
+from .models import Collection, Product, Review
+from .serializers import CollectionSerializers, ProductSerializers, ReviewSerializers
 
 
 class CollectionViewSet(ModelViewSet):
@@ -16,6 +16,11 @@ class CollectionViewSet(ModelViewSet):
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
+
+
+class ReviewViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializers
 
 
 # class ProductList(APIView):
