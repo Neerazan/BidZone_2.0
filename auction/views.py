@@ -19,7 +19,7 @@ class ProductViewSet(ModelViewSet):
 
 
 class ReviewViewSet(ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.select_related('seller').all()
     serializer_class = ReviewSerializers
 
 
