@@ -62,7 +62,7 @@ class ProductDetails(APIView):
     
     def put(self, request, pk):
         product = get_object_or_404(Product, pk=pk)
-        serializer = ProductSerializers(Product, data=request.data)
+        serializer = ProductSerializers(product, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)

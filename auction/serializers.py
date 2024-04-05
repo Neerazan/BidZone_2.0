@@ -16,6 +16,7 @@ class ProductSerializers(serializers.ModelSerializer):
         fields = ['title', 'description', 'slug', 'collection', 'price', 'price_with_tax', 'seller']
     
     slug = serializers.SlugField(write_only=True)
+
     price_with_tax = serializers.SerializerMethodField(
         method_name='calculate_tax'
     )

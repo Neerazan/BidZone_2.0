@@ -1,4 +1,5 @@
 from django.contrib import admin
+from decimal import Decimal
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
@@ -89,7 +90,7 @@ class Product(models.Model):
     seller = models.ForeignKey(Customer, on_delete=models.PROTECT)
     price = models.DecimalField(max_digits=10,
                                 decimal_places=2,
-                                validators=[MinValueValidator(1)]
+                                validators=[MinValueValidator(Decimal(1))]
                                 )
     
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT, related_name='products')
