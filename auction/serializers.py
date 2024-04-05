@@ -13,13 +13,11 @@ class CollectionSerializers(serializers.ModelSerializer):
 class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ['title', 'description', 'slug', 'collection', 'price', 'seller']
-    
-    # slug = serializers.SlugField(write_only=True)
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'price_with_tax', 'seller']
 
-    # price_with_tax = serializers.SerializerMethodField(
-    #     method_name='calculate_tax'
-    # )
+    price_with_tax = serializers.SerializerMethodField(
+        method_name='calculate_tax'
+    )
 
-    # def calculate_tax(self, product: Product):
-    #     return product.price * Decimal(1.1)
+    def calculate_tax(self, product: Product):
+        return product.price * Decimal(1.1)

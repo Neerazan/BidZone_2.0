@@ -1,29 +1,25 @@
 from rest_framework.views import APIView
-from rest_framework import status
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from django.db.models.aggregates import Count
 from rest_framework import generics
-from django.db.models import Prefetch
-
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Collection, Product, Promotion
 from .serializers import CollectionSerializers, ProductSerializers
 
-class CollectionView(generics.ListCreateAPIView):
+
+class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.annotate(products_count = Count('products')).all()
     serializer_class = CollectionSerializers
 
-class CollectionDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Collection.objects.annotate(products_count = Count('products')).all()
-    serializer_class = CollectionSerializers
 
-class ProductList(generics.ListCreateAPIView):
-    #TODO: Optimize Query Problem
 
+class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
 
+
+# class ProductList(APIView):
+    #TODO: Optimize Query Problem
 
     # def get(self, request):
     #     queryset = Product.objects.all()
@@ -37,9 +33,7 @@ class ProductList(generics.ListCreateAPIView):
     #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class ProductDetails(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializers
+# class ProductDetails(APIView):
     # def get(self, request, pk):
     #     product = get_object_or_404(Product, pk=pk)
     #     serializer = ProductSerializers(product)
