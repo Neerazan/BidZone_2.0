@@ -12,14 +12,21 @@ class CollectionViewSet(ModelViewSet):
     serializer_class = CollectionSerializers
 
 
+
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()  
     serializer_class = ProductSerializers
 
 
 class ReviewViewSet(ModelViewSet):
-    queryset = Review.objects.all()
+    
+    def get_queryset(self):
+        return Review.objects.filter(seller_id=self.kwargs['customer_pk'])
+    
     serializer_class = ReviewSerializers
+
+    def get_serializer_context(self):
+        return {'seller_id': self.kwargs['customer_pk']}
 
 
 class CustomerViewSet(ModelViewSet):

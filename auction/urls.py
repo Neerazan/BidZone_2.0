@@ -8,10 +8,10 @@ from .views import ProductViewSet, CollectionViewSet, ReviewViewSet, CustomerVie
 router = routers.DefaultRouter()
 router.register('products', ProductViewSet, basename='product')
 router.register('collections', CollectionViewSet)
-router.register('reviews', ReviewViewSet)
+# router.register('reviews', ReviewViewSet)
 router.register('customers', CustomerViewSet)
 
-customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer_pk')
+customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')
 customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
 
 urlpatterns = router.urls + customer_router.urls

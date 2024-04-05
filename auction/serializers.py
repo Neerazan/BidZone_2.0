@@ -19,12 +19,14 @@ class ProductSerializers(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer']
 
 class ReviewSerializers(serializers.ModelSerializer):
-
-    seller = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     reviewer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     class Meta:
         model = Review
-        fields = ['id', 'seller', 'reviewer', 'description', 'created_at']
+        fields = ['id', 'reviewer', 'description']
+    
+    def create(self, validated_data):
+        seller_id = self.context['seller_id']
+        return Review.objects.create(seller_id=seller_id, **validated_data)
 
 
 class CustomerSerializers(serializers.ModelSerializer):
