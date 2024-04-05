@@ -32,36 +32,3 @@ class ReviewViewSet(ModelViewSet):
 class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializers
-
-# class ProductList(APIView):
-    #TODO: Optimize Query Problem
-
-    # def get(self, request):
-    #     queryset = Product.objects.all()
-    #     serializer = ProductSerializers(queryset, many=True)
-    #     return Response(serializer.data)
-    
-    # def post(self, request):
-    #     serializer = ProductSerializers(data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-
-# class ProductDetails(APIView):
-    # def get(self, request, pk):
-    #     product = get_object_or_404(Product, pk=pk)
-    #     serializer = ProductSerializers(product)
-    #     return Response(serializer.data)
-    
-    # def put(self, request, pk):
-    #     product = get_object_or_404(Product, pk=pk)
-    #     serializer = ProductSerializers(product, data=request.data)
-    #     serializer.is_valid(raise_exception=True)
-    #     serializer.save()
-    #     return Response(serializer.data)
-    
-    # def delete(self, request, pk):
-    #     product = Product.objects.get(pk=pk)
-    #     product.delete()
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
