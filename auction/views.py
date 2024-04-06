@@ -7,7 +7,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 
 from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem
-from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer
+from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer, WishlistItemSerializer
 from .filters import ProductFilter
 from .pagination import DefaultPagination
 
@@ -53,7 +53,16 @@ class CustomerViewSet(ModelViewSet):
     serializer_class = CustomerSerializer
 
 
-class WishlistViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
+class WishlistViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet, DestroyModelMixin):
 
     queryset = Wishlist.objects.prefetch_related('items__product').all()
     serializer_class = WishlistSerializer
+
+
+class WishlistItemViewSet(ModelViewSet):
+    serializer_class = WishlistItemSerializer
+
+    def get_queryset(self):
+        return WishlistItem.objects \
+            .filter(wishlist_id=self.kwargs['wishlist_pk']) \
+            .select_related('product')

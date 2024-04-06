@@ -50,7 +50,7 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 
 class WishlistSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    items = WishlistItemSerializer(many=True)
+    items = WishlistItemSerializer(many=True, read_only=True)
     total_price = serializers.SerializerMethodField()
 
     def get_total_price(self, wishlist):
