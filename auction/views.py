@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
 
 from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem
 from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer, WishlistItemSerializer, AddWishlistItemSerializer
@@ -48,7 +48,7 @@ class ReviewViewSet(ModelViewSet):
         return {'seller_id': self.kwargs['customer_pk']}
 
 
-class CustomerViewSet(ModelViewSet):
+class CustomerViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, GenericViewSet):
     queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializer
 

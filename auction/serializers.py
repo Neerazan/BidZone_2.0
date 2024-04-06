@@ -29,9 +29,11 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
+
+    user_id = serializers.IntegerField()
     class Meta:
         model = Customer
-        fields = ['id', 'first_name', 'last_name', 'phone', 'membership', 'user']
+        fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'birth_date', 'membership']
 
 
 class SimpleProductSerializer(serializers.ModelSerializer):
