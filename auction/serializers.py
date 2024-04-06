@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from decimal import Decimal
 from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem
-from core.serializers import UserSerializer
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,7 +29,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
     class Meta:
         model = Customer
         fields = ['id', 'first_name', 'last_name', 'phone', 'membership', 'user']
