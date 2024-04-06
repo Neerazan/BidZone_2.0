@@ -9,8 +9,10 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
-from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem
-from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer, WishlistItemSerializer, AddWishlistItemSerializer
+from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage
+
+from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer, WishlistItemSerializer, AddWishlistItemSerializer, ProductImageSerializer
+
 from .filters import ProductFilter
 from .pagination import DefaultPagination
 from .permissions import IsAdminOrReadOnly
@@ -98,3 +100,8 @@ class WishlistItemViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'wishlist_id': self.kwargs['wishlist_pk']}
+    
+
+class ProductImageViewSet(ModelViewSet):
+    queryset = ProductImage.objects.all()
+    serializer_class = ProductImageSerializer

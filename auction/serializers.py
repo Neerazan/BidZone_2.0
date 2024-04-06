@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from decimal import Decimal
-from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem
+from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -74,3 +74,10 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistItem
         fields = ['id', 'product_id']
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'product', 'image']
+
