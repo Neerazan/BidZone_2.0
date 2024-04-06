@@ -174,8 +174,8 @@ class WishlistItem(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    # def __str__(self):
-    #     return f"{self.product.title} in {self.wishlist.customer.user.get_username()}'s Wishlist"
+    def __str__(self):
+        return f"{self.product.title}"
 
 
 

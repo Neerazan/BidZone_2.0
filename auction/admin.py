@@ -139,6 +139,6 @@ class WishlistAdmin(admin.ModelAdmin):
     list_display = ['id']
 
 
-# @admin.register(models.WishlistItem)
-# class WishlistItemAdmin(admin.ModelAdmin):
-#     list_display = ['wishlist', 'product']
+@admin.register(models.WishlistItem)
+class WishlistItemAdmin(admin.ModelAdmin):
+    list_display = ['wishlist', 'product']

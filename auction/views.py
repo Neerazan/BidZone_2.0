@@ -1,25 +1,26 @@
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
+from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin
 
-from .models import Collection, Product, Review, Customer
-from .serializers import CollectionSerializers, ProductSerializers, ReviewSerializers, CustomerSerializers
+from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem
+from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer
 from .filters import ProductFilter
 from .pagination import DefaultPagination
 
 
 class CollectionViewSet(ModelViewSet):
     queryset = Collection.objects.annotate(products_count = Count('products')).all()
-    serializer_class = CollectionSerializers
+    serializer_class = CollectionSerializer
 
 
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()
-    serializer_class = ProductSerializers
+    serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
     pagination_class = DefaultPagination
@@ -41,7 +42,7 @@ class ReviewViewSet(ModelViewSet):
     def get_queryset(self):
         return Review.objects.filter(seller_id=self.kwargs['customer_pk'])
     
-    serializer_class = ReviewSerializers
+    serializer_class = ReviewSerializer
 
     def get_serializer_context(self):
         return {'seller_id': self.kwargs['customer_pk']}
@@ -49,4 +50,10 @@ class ReviewViewSet(ModelViewSet):
 
 class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.select_related('user').all()
-    serializer_class = CustomerSerializers
+    serializer_class = CustomerSerializer
+
+
+class WishlistViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet):
+
+    queryset = Wishlist.objects.prefetch_related('items__product').all()
+    serializer_class = WishlistSerializer
