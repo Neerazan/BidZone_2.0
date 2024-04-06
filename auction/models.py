@@ -204,6 +204,11 @@ class Delivery(models.Model):
 
     def __str__(self):
         return f"Delivery for {self.auction} to {self.user.user.get_username()}"
+    
+    class Meta:
+        permissions = [
+            ('cancel_delivery', 'Can cancel delivery')
+        ]
 
 
 class Review(models.Model):
