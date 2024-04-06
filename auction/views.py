@@ -60,6 +60,8 @@ class WishlistViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet, Dest
 
 
 class WishlistItemViewSet(ModelViewSet):
+
+    http_method_names = ['get', 'post', 'delete'] #it is case sensative
     
     def get_serializer_class(self):
         if self.request.method == 'POST':
