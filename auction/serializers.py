@@ -58,3 +58,19 @@ class WishlistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wishlist
         fields = ['id', 'items', 'total_price']
+
+
+class AddWishlistItemSerializer(serializers.ModelSerializer):
+    product_id = serializers.IntegerField()
+
+    def validate_product_id(self, value):
+        if not Product.objects.filter(pk=value).exists():
+            raise serializers.ValidationError('No product with this ID was found.')
+        return value
+
+    def save(self, **kwargs):
+        wishlist_id = self.context['wishlist_id']
+        return WishlistItem.objects.create(wishlist_id=wishlist_id, **self.validated_data)
+    class Meta:
+        model = WishlistItem
+        fields = ['id', 'product_id']
