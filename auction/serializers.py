@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from decimal import Decimal
-from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage
+from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage, Auction
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -8,6 +8,9 @@ class CollectionSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'products_count']
 
     products_count = serializers.IntegerField(read_only=True)
+
+
+
 
 
 
@@ -22,13 +25,25 @@ class ProductImageSerializer(serializers.ModelSerializer):
         fields = ['id', 'image'] #product id is not defined here because it is already available in nested url
 
 
+
+
+
 class ProductSerializer(serializers.ModelSerializer):
 
     customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     images = ProductImageSerializer(many=True, read_only=True)
+
+    def validate_product_delete(self, value):
+        if Auction.objects.filter(pk=value).exists():
+            raise serializers.ValidationError('This production is in auction, You can not delete it')
+        return value
+
     class Meta:
         model = Product
         fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer', 'images']
+
+
+
 
 class ReviewSerializer(serializers.ModelSerializer):
     reviewer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
@@ -41,6 +56,8 @@ class ReviewSerializer(serializers.ModelSerializer):
         return Review.objects.create(seller_id=seller_id, **validated_data)
 
 
+
+
 class CustomerSerializer(serializers.ModelSerializer):
 
     user_id = serializers.IntegerField(read_only=True)
@@ -49,16 +66,25 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'birth_date', 'membership']
 
 
+
+
+
 class SimpleProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'price']
+
+
+
 
 class WishlistItemSerializer(serializers.ModelSerializer):
     product = SimpleProductSerializer()
     class Meta:
         model = WishlistItem
         fields = ['id', 'product']
+
+
+
 
 
 class WishlistSerializer(serializers.ModelSerializer):
@@ -73,6 +99,9 @@ class WishlistSerializer(serializers.ModelSerializer):
         fields = ['id', 'items', 'total_price']
 
 
+
+
+
 class AddWishlistItemSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField()
 
@@ -80,7 +109,7 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
         if not Product.objects.filter(pk=value).exists():
             raise serializers.ValidationError('No product with this ID was found.')
         return value
-
+    
     def save(self, **kwargs):
         wishlist_id = self.context['wishlist_id']
         return WishlistItem.objects.create(wishlist_id=wishlist_id, **self.validated_data)

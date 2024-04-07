@@ -1,11 +1,12 @@
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models.deletion import ProtectedError
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage
@@ -26,6 +27,9 @@ class CollectionViewSet(ModelViewSet):
     serializer_class = CollectionSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
 
 
 class ProductViewSet(ModelViewSet):
@@ -37,6 +41,12 @@ class ProductViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
     search_fields = ['title', 'description', 'collection__title']
     ordering_fields = ['price', 'updated_at']
+
+    def destroy(self, request, *args, **kwargs):
+        try:
+            return super().destroy(request, *args, **kwargs)
+        except ProtectedError:
+            return Response("Can not delete product because it is referenced by auction.", status=status.HTTP_400_BAD_REQUEST)
 
     #----------Custom Filter---------
     # def get_queryset(self):
