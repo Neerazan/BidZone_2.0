@@ -17,6 +17,7 @@ class Promotion(models.Model):
 class Collection(models.Model):
     title = models.CharField(max_length=30)
     feaured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title

@@ -18,6 +18,11 @@ from .pagination import DefaultPagination
 from .permissions import IsAdminOrReadOnly
 
 class CollectionViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    pagination_class = DefaultPagination
+    search_fields = ['title']
+    ordering_fields = ['created_at', 'products_count']
+
     queryset = Collection.objects.annotate(products_count = Count('products')).all()
     serializer_class = CollectionSerializer
     permission_classes = [IsAdminOrReadOnly]
@@ -63,7 +68,8 @@ class CustomerViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = DefaultPagination
     search_fields = ['phone', 'membership', 'user__first_name', 'user__last_name']
-    ordering_fields = ['membership', 'user__first_name', 'created_at']
+    ordering_fields = ['user__first_name', 'user__last_name', 'created_at']
+    filterset_fields = ['membership']
 
 
     # def get_permissions(self):
@@ -83,6 +89,7 @@ class CustomerViewSet(ModelViewSet):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data)
+
 
 class WishlistViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet, DestroyModelMixin):
 

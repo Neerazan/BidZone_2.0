@@ -1,5 +1,5 @@
 from django_filters.rest_framework import FilterSet
-from .models import Product
+from .models import Product, Collection
 
 class ProductFilter(FilterSet):
     class Meta:
