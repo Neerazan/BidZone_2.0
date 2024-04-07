@@ -9,7 +9,7 @@ router.register('collections', CollectionViewSet)
 # router.register('reviews', ReviewViewSet)
 router.register('customers', CustomerViewSet)
 router.register('wishlists', WishlistViewSet)
-router.register('product_image', ProductImageViewSet)
+# router.register('product_image', ProductImageViewSet)
 
 customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')
 customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
@@ -17,7 +17,12 @@ customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
 wishlists_router = routers.NestedDefaultRouter(router, 'wishlists', lookup='wishlist')
 wishlists_router.register('items', WishlistItemViewSet, basename='cart-items')
 
-urlpatterns = router.urls + customer_router.urls + wishlists_router.urls
+products_router = routers.NestedDefaultRouter(router, 'products', lookup='product')
+products_router.register('images', ProductImageViewSet, basename='product-images')
+
+
+
+urlpatterns = router.urls + customer_router.urls + wishlists_router.urls + products_router.urls
 
 
 # urlpatterns = [
