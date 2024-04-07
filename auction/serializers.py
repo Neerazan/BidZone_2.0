@@ -10,12 +10,25 @@ class CollectionSerializer(serializers.ModelSerializer):
     products_count = serializers.IntegerField(read_only=True)
 
 
+
+class ProductImageSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        product_id = self.context['product_id']
+        return ProductImage.objects.create(product_id=product_id, **validated_data)
+    
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image'] #product id is not defined here because it is already available in nested url
+
+
 class ProductSerializer(serializers.ModelSerializer):
 
     customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
+    images = ProductImageSerializer(many=True, read_only=True)
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer']
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer', 'images']
 
 class ReviewSerializer(serializers.ModelSerializer):
     reviewer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
@@ -74,14 +87,3 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistItem
         fields = ['id', 'product_id']
-
-
-class ProductImageSerializer(serializers.ModelSerializer):
-
-    def create(self, validated_data):
-        product_id = self.context['product_id']
-        return ProductImage.objects.create(product_id=product_id, **validated_data)
-    
-    class Meta:
-        model = ProductImage
-        fields = ['id', 'image'] #product id is not defined here because it is already available in nested url
