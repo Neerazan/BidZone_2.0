@@ -6,14 +6,14 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter
 from rest_framework.filters import OrderingFilter
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, DestroyModelMixin, UpdateModelMixin
+
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
 from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage
 
 from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer, WishlistItemSerializer, AddWishlistItemSerializer, ProductImageSerializer
 
-from .filters import ProductFilter
+from .filters import ProductFilter, WishListItemFilter
 from .pagination import DefaultPagination
 from .permissions import IsAdminOrReadOnly
 
@@ -91,14 +91,24 @@ class CustomerViewSet(ModelViewSet):
             return Response(serializer.data)
 
 
-class WishlistViewSet(CreateModelMixin, RetrieveModelMixin, GenericViewSet, DestroyModelMixin):
+class WishlistViewSet(ModelViewSet):
+
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    pagination_class = DefaultPagination
+    search_fields = ['id']
+    ordering_fields = ['created_at']
 
     queryset = Wishlist.objects.prefetch_related('items__product').all()
     serializer_class = WishlistSerializer
 
 
 class WishlistItemViewSet(ModelViewSet):
-
+    
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    pagination_class = DefaultPagination
+    search_fields = ['product__title']
+    ordering_fields = ['created_at']
+    filterset_class = WishListItemFilter
     http_method_names = ['get', 'post', 'delete'] #it is case sensative
     
     def get_serializer_class(self):
