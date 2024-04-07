@@ -1,6 +1,8 @@
-from django.urls import path, include
-from .views import SliderView
+from rest_framework_nested import routers
 
-urlpatterns = [
-    path('content/', SliderView.as_view())
-]
+from .views import SliderViewSet
+
+router = routers.DefaultRouter()
+router.register('items', SliderViewSet)
+
+urlpatterns = router.urls

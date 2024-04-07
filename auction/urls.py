@@ -1,6 +1,4 @@
-from django.urls import path, include
 from rest_framework_nested import routers
-from pprint import pprint
 from .views import ProductViewSet, CollectionViewSet, ReviewViewSet, CustomerViewSet, WishlistViewSet, WishlistItemViewSet, ProductImageViewSet
 
 
