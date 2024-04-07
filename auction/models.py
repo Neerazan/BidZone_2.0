@@ -225,12 +225,12 @@ class Review(models.Model):
 
 class Chat(models.Model):
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     message = models.TextField()
     created_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Chat on {self.auction.product.title} by {self.user.user.get_username()}"
+        return f"Chat on {self.auction.product.title} by {self.customer.user.get_username()}"
 
 
 class Transaction(models.Model):

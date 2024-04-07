@@ -169,7 +169,9 @@ class AuctionChatViewSet(ModelViewSet):
         return Chat.objects.filter(auction_id=self.kwargs['auction_pk'])
 
     def get_serializer_context(self):
+        user_id = self.request.user.id
+        customer = Customer.objects.get(user_id=user_id)
         return {
             'auction_id': self.kwargs['auction_pk'],
-            'user_id': self.request.user.id
+            'customer_id': customer.id
         }

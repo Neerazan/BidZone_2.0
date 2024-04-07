@@ -120,9 +120,9 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(models.Chat)
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ['auction', 'user', 'message']
+    list_display = ['auction', 'customer', 'message']
     search_fields = ['message']
-    autocomplete_fields = ['auction', 'user']
+    autocomplete_fields = ['auction', 'customer']
 
 
 

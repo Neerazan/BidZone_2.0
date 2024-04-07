@@ -129,9 +129,9 @@ class AuctionChatSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         auction_id = self.context.get('auction_id')
-        user_id = self.context.get('user_id')
-        return Chat.objects.create(auction_id=auction_id, user_id=user_id, **validated_data)
+        customer_id = self.context.get('customer_id')
+        return Chat.objects.create(auction_id=auction_id, customer_id=customer_id, **validated_data)
 
     class Meta:
         model = Chat
-        fields = ['id', 'auction_id', 'user_id', 'message']
+        fields = ['id', 'auction_id', 'customer_id', 'message']
