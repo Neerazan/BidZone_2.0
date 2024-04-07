@@ -30,7 +30,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
 
-    customer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     images = ProductImageSerializer(many=True, read_only=True)
 
     def validate_product_delete(self, value):
@@ -40,16 +39,15 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer', 'images']
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'customer_id', 'images']
 
 
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    reviewer = serializers.PrimaryKeyRelatedField(queryset=Customer.objects.select_related('user').all())
     class Meta:
         model = Review
-        fields = ['id', 'reviewer', 'description']
+        fields = ['id', 'reviewer_id', 'description']
     
     def create(self, validated_data):
         seller_id = self.context['seller_id']
