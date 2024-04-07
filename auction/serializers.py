@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from decimal import Decimal
-from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage, Auction
+from .models import *
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -116,3 +116,17 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistItem
         fields = ['id', 'product_id']
+
+
+
+class AuctionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Auction
+        fields = ['id', 'product', 'current_price', 'ending_time', 'auction_status']
+
+
+
+class AuctionChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Chat
+        fields = ['id', 'auction', 'user', 'message']

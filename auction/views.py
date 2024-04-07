@@ -9,13 +9,13 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 
-from .models import Collection, Product, Review, Customer, Wishlist, WishlistItem, ProductImage
-
-from .serializers import CollectionSerializer, ProductSerializer, ReviewSerializer, CustomerSerializer, WishlistSerializer, WishlistItemSerializer, AddWishlistItemSerializer, ProductImageSerializer
+from .models import *
+from .serializers import *
 
 from .filters import ProductFilter, WishListItemFilter
 from .pagination import DefaultPagination
 from .permissions import IsAdminOrReadOnly
+
 
 class CollectionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -29,6 +29,7 @@ class CollectionViewSet(ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+
 
 
 
@@ -59,8 +60,15 @@ class ProductViewSet(ModelViewSet):
     #     return queryset
 
 
+
+
+class AuctionViewSet(ModelViewSet):
+    queryset = Auction.objects.all()
+    serializer_class = AuctionSerializer
+
+
+
 class ReviewViewSet(ModelViewSet):
-    
     def get_queryset(self):
         return Review.objects.filter(seller_id=self.kwargs['customer_pk'])
     
@@ -68,6 +76,8 @@ class ReviewViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'seller_id': self.kwargs['customer_pk']}
+
+
 
 
 class CustomerViewSet(ModelViewSet):
@@ -100,6 +110,8 @@ class CustomerViewSet(ModelViewSet):
             return Response(serializer.data)
 
 
+
+
 class WishlistViewSet(ModelViewSet):
 
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -111,8 +123,9 @@ class WishlistViewSet(ModelViewSet):
     serializer_class = WishlistSerializer
 
 
+
+
 class WishlistItemViewSet(ModelViewSet):
-    
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = DefaultPagination
     search_fields = ['product__title']
@@ -132,7 +145,9 @@ class WishlistItemViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'wishlist_id': self.kwargs['wishlist_pk']}
-    
+
+
+
 
 class ProductImageViewSet(ModelViewSet):
     serializer_class = ProductImageSerializer
@@ -144,3 +159,9 @@ class ProductImageViewSet(ModelViewSet):
         return {
             'product_id': self.kwargs['product_pk']
         }
+
+
+
+class AuctionChatViewSet(ModelViewSet):
+    queryset = Chat.objects.all()
+    serializer_class = AuctionChatSerializer
