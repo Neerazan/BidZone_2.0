@@ -34,6 +34,7 @@ class ProductViewSet(ModelViewSet):
     search_fields = ['title', 'description', 'collection__title']
     ordering_fields = ['price', 'updated_at']
 
+    #----------Custom Filter---------
     # def get_queryset(self):
     #     queryset = Product.objects.all()
     #     collection_id = self.request.query_params.get('collection_id')
@@ -59,6 +60,11 @@ class CustomerViewSet(ModelViewSet):
     queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializer
     permission_classes = [IsAdminUser]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    pagination_class = DefaultPagination
+    search_fields = ['phone', 'membership', 'user__first_name', 'user__last_name']
+    ordering_fields = ['membership', 'user__first_name', 'created_at']
+
 
     # def get_permissions(self):
     #     if self.request.method == 'GET':
