@@ -61,13 +61,6 @@ class ProductViewSet(ModelViewSet):
 
 
 
-
-class AuctionViewSet(ModelViewSet):
-    queryset = Auction.objects.all()
-    serializer_class = AuctionSerializer
-
-
-
 class ReviewViewSet(ModelViewSet):
     def get_queryset(self):
         return Review.objects.filter(seller_id=self.kwargs['customer_pk'])
@@ -160,8 +153,19 @@ class ProductImageViewSet(ModelViewSet):
             'product_id': self.kwargs['product_pk']
         }
 
+class AuctionViewSet(ModelViewSet):
+    queryset = Auction.objects.all()
+    serializer_class = AuctionSerializer
+
 
 
 class AuctionChatViewSet(ModelViewSet):
-    queryset = Chat.objects.all()
     serializer_class = AuctionChatSerializer
+
+    def get_queryset(self):
+        return Chat.objects.filter(auction_id=self.kwargs['auction_pk'])
+
+    def get_serializer_context(self):
+        return {
+            'auction_id': self.kwargs['auction_pk']
+        }
