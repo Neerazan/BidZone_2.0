@@ -129,4 +129,4 @@ class AuctionSerializer(serializers.ModelSerializer):
 class AuctionChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
-        fields = ['id', 'auction', 'user', 'message']
+        fields = ['id', 'auction_id', 'user', 'message']
