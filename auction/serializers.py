@@ -50,8 +50,9 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ['id', 'reviewer_id', 'description']
     
     def create(self, validated_data):
-        seller_id = self.context['seller_id']
-        return Review.objects.create(seller_id=seller_id, **validated_data)
+        seller_id = self.context.get('seller_id')
+        reviewer_id = self.context.get('reviewer_id')
+        return Review.objects.create(seller_id=seller_id, reviewer_id=reviewer_id, **validated_data)
 
 
 
@@ -125,6 +126,11 @@ class AuctionSerializer(serializers.ModelSerializer):
 
 
 class AuctionChatSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        auction_id = self.context.get('auction_id')
+        user_id = self.context.get('user_id')
+        return Chat.objects.create(auction_id=auction_id, user_id=user_id, **validated_data)
 
     class Meta:
         model = Chat

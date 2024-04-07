@@ -68,7 +68,10 @@ class ReviewViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
 
     def get_serializer_context(self):
-        return {'seller_id': self.kwargs['customer_pk']}
+        return {
+            'seller_id': self.kwargs['customer_pk'],
+            'reviewer_id': self.request.user.id
+        }
 
 
 
@@ -167,5 +170,6 @@ class AuctionChatViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {
-            'auction_id': self.kwargs['auction_pk']
+            'auction_id': self.kwargs['auction_pk'],
+            'user_id': self.request.user.id
         }
