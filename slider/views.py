@@ -16,6 +16,6 @@ class SliderViewSet(ModelViewSet):
     search_fields = ['title']
     ordering_fields = ['created_at', 'updated_at']
     permission_classes = [IsAdminOrReadOnly]
-
+    
     queryset = Slider.objects.filter(status=True)
     serializer_class = SliderSerializers
