@@ -27,6 +27,19 @@ class CollectionAdmin(admin.ModelAdmin):
             products_count=Count('products')
         )
 
+class ProductImageInline(admin.TabularInline):
+    model = models.ProductImage
+    readonly_fields = ['thumbnail']
+
+    def thumbnail(self, instance):
+        if instance.image.name != '':
+            return format_html(f'<img src="{instance.image.url}" class="thumbnail"/>')
+        return ''
+    
+    class Media:
+        css = {
+            'all': ['auction/styles.css']
+        }
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
