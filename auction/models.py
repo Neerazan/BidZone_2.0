@@ -64,7 +64,7 @@ class UserCoin(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.customer.username} -> {self.balance}"
+        return f"{self.customer.user.username} -> {self.balance}"
     
     class Meta:
         ordering = ['customer']

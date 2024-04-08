@@ -29,7 +29,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-
     images = ProductImageSerializer(many=True, read_only=True)
 
     def validate_product_delete(self, value):
@@ -58,7 +57,6 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 
 class CustomerSerializer(serializers.ModelSerializer):
-
     user_id = serializers.IntegerField(read_only=True)
     class Meta:
         model = Customer
@@ -118,10 +116,12 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
 
 
 
+
 class AuctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Auction
         fields = ['id', 'product', 'current_price', 'ending_time', 'auction_status']
+
 
 
 
@@ -137,14 +137,38 @@ class AuctionChatSerializer(serializers.ModelSerializer):
 
 
 
+
 class BidsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid
         fields = ['id', 'auction_id', 'bidder_id', 'amount', 'status']
     
 
+    def validate_amount(self, value):
+        auction_id = self.context.get('auction_id')
+        current_price = Auction.objects.get(id=auction_id).current_price
+        bidder = self.context.get('bidder_id')
+        balance = UserCoin.objects.get(customer=bidder).balance
+
+        if value <= current_price:
+            raise serializers.ValidationError("Bid Amount Must be grater than the current bid amount")
+
+        if balance < value:
+            raise serializers.ValidationError("You don't have enough balance to bid")
+        
+        return value
+
+
     def create(self, validated_data):
         auction_id = self.context.get('auction_id')
         bidder_id = self.context.get('bidder_id')
+
+        auction = Auction.objects.get(pk=auction_id)
+        auction.current_price = validated_data['amount']
+        auction.save()
+
+        customr_balance = UserCoin.objects.get(customer=bidder_id)
+        customr_balance.balance = customr_balance.balance - validated_data['amount']
+        customr_balance.save()
 
         return Bid.objects.create(bidder_id=bidder_id, auction_id=auction_id, **validated_data)
