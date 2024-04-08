@@ -2,10 +2,16 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.conf import settings
 
-from .models import Customer
+from .models import Customer, UserCoin
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_customer_for_new_user(sender, **kwargs):
     if kwargs['created']:
         Customer.objects.create(user=kwargs['instance'])
+
+
+@receiver(post_save, sender=Customer)
+def create_balance_for_new_customer(sender, **kwargs):
+    if kwargs['created']:
+        UserCoin.objects.create(customer=kwargs['instance'])
