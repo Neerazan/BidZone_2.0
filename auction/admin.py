@@ -155,3 +155,8 @@ class WishlistAdmin(admin.ModelAdmin):
 @admin.register(models.WishlistItem)
 class WishlistItemAdmin(admin.ModelAdmin):
     list_display = ['wishlist', 'product']
+
+
+@admin.register(models.UserCoin)
+class UserCoinAdmin(admin.ModelAdmin):
+    list_display = ['customer', 'balance']

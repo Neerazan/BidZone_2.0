@@ -58,16 +58,16 @@ class Customer(models.Model):
 
 
 class UserCoin(models.Model):
-    user = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='coin_balance', primary_key=True)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='coin_balance', primary_key=True)
     balance = models.PositiveIntegerField(default=10000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return f"{self.user.username} -> {self.balance}"
+        return f"{self.customer.username} -> {self.balance}"
     
     class Meta:
-        ordering = ['user']
+        ordering = ['customer']
 
 
 class Address(models.Model):
