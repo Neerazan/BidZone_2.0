@@ -126,7 +126,6 @@ class AuctionSerializer(serializers.ModelSerializer):
 
 
 class AuctionChatSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data):
         auction_id = self.context.get('auction_id')
         customer_id = self.context.get('customer_id')
@@ -135,3 +134,17 @@ class AuctionChatSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat
         fields = ['id', 'auction_id', 'customer_id', 'message']
+
+
+
+class BidsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bid
+        fields = ['id', 'auction_id', 'bidder_id', 'amount', 'status']
+    
+
+    def create(self, validated_data):
+        auction_id = self.context.get('auction_id')
+        bidder_id = self.context.get('bidder_id')
+
+        return Bid.objects.create(bidder_id=bidder_id, auction_id=auction_id, **validated_data)

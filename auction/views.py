@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.exceptions import NotFound
 
 from .models import *
 from .serializers import *
@@ -178,4 +179,20 @@ class AuctionChatViewSet(ModelViewSet):
         return {
             'auction_id': self.kwargs['auction_pk'],
             'customer_id': customer.id
+        }
+
+
+
+
+class BidsViewSet(ModelViewSet):
+    serializer_class = BidsSerializer
+
+    def get_queryset(self):
+        return Bid.objects.filter(auction_id=self.kwargs['auction_pk'])
+    
+    def get_serializer_context(self):
+        customer = Customer.objects.get(user_id=self.request.user.id)
+        return {
+            'auction_id': self.kwargs['auction_pk'],
+            'bidder_id': customer.id
         }

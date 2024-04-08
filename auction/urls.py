@@ -5,11 +5,10 @@ from .views import *
 router = routers.DefaultRouter()
 router.register('products', ProductViewSet, basename='products')
 router.register('collections', CollectionViewSet)
-# router.register('reviews', ReviewViewSet)
 router.register('customers', CustomerViewSet)
 router.register('wishlists', WishlistViewSet)
-# router.register('product_image', ProductImageViewSet)
 router.register('auctions', AuctionViewSet)
+# router.register('bids', BidsViewSet)
 
 customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')
 customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
@@ -23,6 +22,7 @@ products_router.register('images', ProductImageViewSet, basename='product-images
 
 auction_router = routers.NestedDefaultRouter(router, 'auctions', lookup='auction')
 auction_router.register('chats', AuctionChatViewSet, basename='auction-chats')
+auction_router.register('bids', BidsViewSet, basename='auction-bids')
 
 
 urlpatterns = router.urls + customer_router.urls + wishlists_router.urls + products_router.urls + auction_router.urls
