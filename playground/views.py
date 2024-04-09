@@ -1,3 +1,9 @@
 from django.shortcuts import render
 
-# Create your views here.
+from .tasks import notify_customers
+
+def say_hello(request):
+    notify_customers.delay('Hello')
+    return render(request, 'hello.html', {
+        'name': 'Celery Prasad'
+    })
