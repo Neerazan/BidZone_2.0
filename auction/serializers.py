@@ -138,6 +138,16 @@ class AuctionChatSerializer(serializers.ModelSerializer):
 
 
 
+
+class DeliverySerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Delivery
+        fields = ['id', 'auction_id', 'customer_id', 'status', 'tracking_number', 'delivery_date']
+
+
+
+
 class BidsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid

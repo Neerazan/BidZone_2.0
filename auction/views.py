@@ -8,7 +8,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import NotFound
 
 from .models import *
@@ -197,3 +197,13 @@ class BidsViewSet(ModelViewSet):
             'auction_id': self.kwargs['auction_pk'],
             'bidder_id': customer.id
         }
+
+
+
+
+class DeliveryViewSet(ModelViewSet):
+    permission_classes = [IsAdminOrReadOnly]
+    serializer_class = DeliverySerializer
+
+    def get_queryset(self):
+        return Delivery.objects.filter(customer_id=self.kwargs['customer_pk'])

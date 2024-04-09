@@ -12,6 +12,8 @@ router.register('auctions', AuctionViewSet)
 
 customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')
 customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
+customer_router.register('deliveries', DeliveryViewSet, basename='customer-deliveries')
+
 
 wishlists_router = routers.NestedDefaultRouter(router, 'wishlists', lookup='wishlist')
 wishlists_router.register('items', WishlistItemViewSet, basename='cart-items')
