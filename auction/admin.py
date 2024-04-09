@@ -128,11 +128,11 @@ class ChatAdmin(admin.ModelAdmin):
 
 @admin.register(models.Delivery)
 class DeliveryAdmin(admin.ModelAdmin):
-    list_display = ['auction', 'status', 'tracking_number', 'delivery_date', 'created_at']
+    list_display = ['auction', 'customer_id', 'status', 'tracking_number', 'delivery_date', 'created_at']
     list_editable = ['status']
     search_fields= ['status', 'tracking_number', 'delivery_date', 'created_at']
     list_filter = ['status']
-    autocomplete_fields =['user', 'auction']
+    autocomplete_fields =['customer', 'auction']
 
 @admin.register(models.Review)
 class ReviewAdmin(admin.ModelAdmin):

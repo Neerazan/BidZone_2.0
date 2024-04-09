@@ -196,7 +196,7 @@ class Delivery(models.Model):
     ]
 
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
-    user = models.ForeignKey(Customer, on_delete=models.PROTECT)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     status = models.CharField(max_length=1, choices=DELIVERY_STATUS_COICES, default=DELIVERY_STATUS_PENDING)
     tracking_number = models.CharField(max_length=255, default="T001P")
     delivery_date = models.DateField(blank=True, null=True)
@@ -204,7 +204,7 @@ class Delivery(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Delivery for {self.auction} to {self.user.user.get_username()}"
+        return f"Delivery for {self.auction} to {self.customer.user.get_username()}"
     
     class Meta:
         permissions = [
