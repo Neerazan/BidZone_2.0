@@ -1,6 +1,7 @@
 from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models.deletion import ProtectedError
+from django.db.models import Q
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
@@ -162,7 +163,7 @@ class ProductImageViewSet(ModelViewSet):
         }
 
 class AuctionViewSet(ModelViewSet):
-    queryset = Auction.objects.all()
+    queryset = Auction.objects.filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
     serializer_class = AuctionSerializer
 
 
