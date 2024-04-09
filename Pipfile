@@ -14,6 +14,8 @@ django-filter = "*"
 djoser = "*"
 djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
+redis = "*"
+celery = "*"
 
 [dev-packages]
 

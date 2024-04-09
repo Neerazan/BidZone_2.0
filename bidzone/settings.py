@@ -92,7 +92,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bidzone', 
         'USER': 'postgres',
-        'PASSWORD': 'admin',
+        'PASSWORD': 'chlorine',
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }
@@ -181,3 +181,5 @@ DJOSER = {
         'current_user': 'core.serializers.UserSerializer',
     }
 }
+
+CELERY_BROKER_URL = 'redis://localhost:6379/1'
