@@ -162,6 +162,9 @@ class ProductImageViewSet(ModelViewSet):
             'product_id': self.kwargs['product_pk']
         }
 
+
+
+
 class AuctionViewSet(ModelViewSet):
     queryset = Auction.objects.filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
     serializer_class = AuctionSerializer
