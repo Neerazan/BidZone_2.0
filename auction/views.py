@@ -36,7 +36,7 @@ class CollectionViewSet(ModelViewSet):
 
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.prefetch_related('images').all()
+    # queryset = Product.objects.prefetch_related('images').all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
@@ -45,11 +45,21 @@ class ProductViewSet(ModelViewSet):
     search_fields = ['title', 'description', 'collection__title']
     ordering_fields = ['price', 'updated_at']
 
+    def get_queryset(self):
+        return Product.objects.prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
+    
+
     def destroy(self, request, *args, **kwargs):
         try:
             return super().destroy(request, *args, **kwargs)
         except ProtectedError:
             return Response("Can not delete product because it is referenced by auction.", status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def get_serializer_context(self):
+        return {
+            'customer_id': self.kwargs['customer_pk']
+        }
 
     #----------Custom Filter---------
     # def get_queryset(self):

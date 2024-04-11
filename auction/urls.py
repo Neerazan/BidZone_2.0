@@ -3,7 +3,6 @@ from .views import *
 
 
 router = routers.DefaultRouter()
-# router.register('products', ProductViewSet, basename='products')
 router.register('collections', CollectionViewSet)
 router.register('customers', CustomerViewSet)
 router.register('wishlists', WishlistViewSet)
@@ -18,10 +17,6 @@ customer_router.register('products', ProductViewSet, basename='customer-products
 
 products_router = routers.NestedDefaultRouter(customer_router, 'products', lookup='product')
 products_router.register('images', ProductImageViewSet, basename='product-images')
-
-
-# products_router = routers.NestedDefaultRouter(router, 'products', lookup='product')
-# products_router.register('images', ProductImageViewSet, basename='product-images')
 
 
 wishlists_router = routers.NestedDefaultRouter(router, 'wishlists', lookup='wishlist')
