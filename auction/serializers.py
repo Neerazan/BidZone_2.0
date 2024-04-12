@@ -38,7 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'images']
+        fields = ['id', 'customer_id', 'title', 'description', 'slug', 'collection', 'price', 'images']
     
 
     def create(self, validated_data):
