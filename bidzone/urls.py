@@ -6,6 +6,7 @@ from django.urls import path, include
 admin.site.site_header = 'BidZone Admin'
 admin.site.index_title = 'Admin Panel'
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auction/', include('auction.urls')),

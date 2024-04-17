@@ -4,7 +4,7 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register('collections', CollectionViewSet)
-router.register('customers', CustomerViewSet)
+router.register('customers', CustomerViewSet, basename='customer')
 router.register('wishlists', WishlistViewSet)
 router.register('auctions', AuctionViewSet)
 
@@ -13,6 +13,7 @@ customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='custo
 customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
 customer_router.register('deliveries', DeliveryViewSet, basename='customer-deliveries')
 customer_router.register('products', ProductViewSet, basename='customer-products')
+customer_router.register('customer_coins', CustomerCoinViewSet, basename="customer-coins")
 
 
 products_router = routers.NestedDefaultRouter(customer_router, 'products', lookup='product')

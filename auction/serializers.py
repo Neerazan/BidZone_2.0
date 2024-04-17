@@ -38,7 +38,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'customer_id', 'title', 'description', 'slug', 'collection', 'price', 'images']
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'images']
     
 
     def create(self, validated_data):
@@ -151,6 +151,10 @@ class DeliverySerializer(serializers.ModelSerializer):
         fields = ['id', 'auction_id', 'customer_id', 'status', 'tracking_number', 'delivery_date']
 
 
+class CustomerCoinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserCoin
+        fields = ['customer_id', 'balance']
 
 
 class BidsSerializer(serializers.ModelSerializer):

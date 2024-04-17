@@ -82,6 +82,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'bidzone.wsgi.application'
 
 

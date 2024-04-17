@@ -9,7 +9,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 
 from .models import *
 from .serializers import *
@@ -33,21 +33,27 @@ class CollectionViewSet(ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
+class CustomerCoinViewSet(ModelViewSet):
+    #TODO: allow only GET Method
+    serializer_class = CustomerCoinSerializer
 
+    def get_queryset(self):
+        return UserCoin.objects.filter(customer_id=self.kwargs['customer_pk'])
+    
 
 class ProductViewSet(ModelViewSet):
-    # queryset = Product.objects.prefetch_related('images').all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
     pagination_class = DefaultPagination
-    # permission_classes = [IsProductOwner]
+    permission_classes = [IsProductOwner]
     search_fields = ['title', 'description', 'collection__title']
     ordering_fields = ['price', 'updated_at']
 
     def get_queryset(self):
         return Product.objects.prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
-    
+        # raise PermissionDenied("You do not have permission to access this resource.")
+
 
     def destroy(self, request, *args, **kwargs):
         try:
@@ -93,14 +99,16 @@ class ReviewViewSet(ModelViewSet):
 
 
 class CustomerViewSet(ModelViewSet):
-    queryset = Customer.objects.select_related('user').all()
     serializer_class = CustomerSerializer
-    permission_classes = [IsUser]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = DefaultPagination
     search_fields = ['phone', 'membership', 'user__first_name', 'user__last_name']
     ordering_fields = ['user__first_name', 'user__last_name', 'created_at']
     filterset_fields = ['membership']
+
+
+    def get_queryset(self):
+        return Customer.objects.select_related('user').filter(user_id=self.request.user.id)
 
 
     # def get_permissions(self):
@@ -125,7 +133,6 @@ class CustomerViewSet(ModelViewSet):
 
 
 class WishlistViewSet(ModelViewSet):
-
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = DefaultPagination
     search_fields = ['id']
