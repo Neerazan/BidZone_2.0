@@ -123,9 +123,11 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
 
 
 class AuctionSerializer(serializers.ModelSerializer):
+    product = SimpleProductSerializer()
+    bids_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Auction
-        fields = ['id', 'product', 'current_price', 'ending_time', 'auction_status']
+        fields = ['id', 'product', 'current_price', 'bids_count', 'ending_time', 'auction_status']
 
 
 

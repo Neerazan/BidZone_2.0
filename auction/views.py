@@ -183,8 +183,12 @@ class ProductImageViewSet(ModelViewSet):
 
 
 class AuctionViewSet(ModelViewSet):
-    queryset = Auction.objects.filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
     serializer_class = AuctionSerializer
+
+    def get_queryset(self):
+        queryset = Auction.objects.select_related('product').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
+        queryset = queryset.annotate(bids_count=Count('bids'))
+        return queryset
 
 
 

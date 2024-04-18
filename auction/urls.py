@@ -6,7 +6,7 @@ router = routers.DefaultRouter()
 router.register('collections', CollectionViewSet)
 router.register('customers', CustomerViewSet, basename='customer')
 router.register('wishlists', WishlistViewSet)
-router.register('auctions', AuctionViewSet)
+router.register('auctions', AuctionViewSet, basename='auction')
 
 
 customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')

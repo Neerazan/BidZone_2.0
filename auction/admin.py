@@ -98,7 +98,7 @@ class AuctionAdmin(admin.ModelAdmin):
     autocomplete_fields = ['product']
 
     def total_bids(self, auction):
-        return auction.bid_set.count()
+        return auction.bids.count()
     
     total_bids.short_description = 'Bids'
 
