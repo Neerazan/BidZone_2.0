@@ -1,5 +1,7 @@
 from rest_framework_nested import routers
 from .views import *
+from django.urls import path, include
+# Your code here
 
 
 router = routers.DefaultRouter()
@@ -7,6 +9,7 @@ router.register('collections', CollectionViewSet)
 router.register('customers', CustomerViewSet, basename='customer')
 router.register('wishlists', WishlistViewSet)
 router.register('auctions', AuctionViewSet, basename='auction')
+# router.register('products', ProductViewSet, basename='product')
 
 
 customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')
@@ -29,4 +32,14 @@ auction_router.register('chats', AuctionChatViewSet, basename='auction-chats')
 auction_router.register('bids', BidsViewSet, basename='auction-bids')
 
 
-urlpatterns = router.urls + customer_router.urls + wishlists_router.urls + auction_router.urls + products_router.urls
+urlpatterns = (
+    [
+        path('auctions/<slug:slug>/', AuctionViewSet.as_view({'get': 'retrieve_by_slug'}), name='auction-detail-slug'),
+    ] +
+    router.urls +
+    customer_router.urls +
+    wishlists_router.urls +
+    auction_router.urls +
+    products_router.urls
+)
+

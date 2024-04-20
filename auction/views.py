@@ -21,7 +21,7 @@ from .permissions import *
 
 class CollectionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    pagination_class = DefaultPagination
+    # pagination_class = DefaultPagination
     search_fields = ['title']
     ordering_fields = ['created_at', 'products_count']
 
@@ -35,6 +35,7 @@ class CollectionViewSet(ModelViewSet):
 
 class CustomerCoinViewSet(ModelViewSet):
     #TODO: allow only GET Method
+    # http_method_names = ['get', 'head', 'options']
     serializer_class = CustomerCoinSerializer
 
     def get_queryset(self):
@@ -189,6 +190,24 @@ class AuctionViewSet(ModelViewSet):
         queryset = Auction.objects.select_related('product').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
         queryset = queryset.annotate(bids_count=Count('bids'))
         return queryset
+    
+    @action(detail=False, methods=['get'])
+    def retrieve_by_slug(self, request, slug=None):
+        try:
+            auction = Auction.objects.get(product__slug=slug)
+            serializer = self.serializer_class(auction)
+            return Response(serializer.data)
+        except Auction.DoesNotExist:
+            return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+    @action(detail=False, methods=['get'])
+    def retrieve_by_auction_id(self, request, auction_id=None):
+        try:
+            auction = Auction.objects.get(id=auction_id)
+            serializer = self.serializer_class(auction)
+            return Response(serializer.data)
+        except Auction.DoesNotExist:
+            return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 
