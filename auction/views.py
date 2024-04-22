@@ -52,7 +52,7 @@ class ProductViewSet(ModelViewSet):
     ordering_fields = ['price', 'updated_at']
 
     def get_queryset(self):
-        return Product.objects.prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
+        return Product.objects.select_related('customer').prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
         # raise PermissionDenied("You do not have permission to access this resource.")
 
 
@@ -194,20 +194,20 @@ class AuctionViewSet(ModelViewSet):
     @action(detail=False, methods=['get'])
     def retrieve_by_slug(self, request, slug=None):
         try:
-            auction = Auction.objects.get(product__slug=slug)
+            auction = Auction.objects.annotate(bids_count=Count('bids')).get(product__slug=slug)
             serializer = self.serializer_class(auction)
             return Response(serializer.data)
         except Auction.DoesNotExist:
             return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
     
-    @action(detail=False, methods=['get'])
-    def retrieve_by_auction_id(self, request, auction_id=None):
-        try:
-            auction = Auction.objects.get(id=auction_id)
-            serializer = self.serializer_class(auction)
-            return Response(serializer.data)
-        except Auction.DoesNotExist:
-            return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
+    # @action(detail=False, methods=['get'])
+    # def retrieve_by_auction_id(self, request, auction_id=None):
+    #     try:
+    #         auction = Auction.objects.get(id=auction_id)
+    #         serializer = self.serializer_class(auction)
+    #         return Response(serializer.data)
+    #     except Auction.DoesNotExist:
+    #         return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 

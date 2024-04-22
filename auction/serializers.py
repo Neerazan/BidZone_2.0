@@ -26,8 +26,6 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 
 
-
-
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
 
@@ -68,14 +66,18 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'birth_date', 'membership']
 
 
-
+class SimpleCustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['id', 'first_name', 'last_name']
 
 
 class SimpleProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
+    customer = SimpleCustomerSerializer(read_only=True)
     class Meta:
         model = Product
-        fields = ['id', 'title', 'slug', 'description', 'price', 'images']
+        fields = ['id', 'title', 'customer', 'slug', 'description', 'price', 'images']
 
 
 
