@@ -34,6 +34,7 @@ auction_router.register('bids', BidsViewSet, basename='auction-bids')
 
 urlpatterns = (
     [
+        path('auctions/<int:auction_id>/', AuctionViewSet.as_view({'get': 'retrieve_by_auction_id'}), name="auction_detail-id"),
         path('auctions/<slug:slug>/', AuctionViewSet.as_view({'get': 'retrieve_by_slug'}), name='auction-detail-slug'),
     ] +
     router.urls +

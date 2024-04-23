@@ -200,14 +200,14 @@ class AuctionViewSet(ModelViewSet):
         except Auction.DoesNotExist:
             return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
     
-    # @action(detail=False, methods=['get'])
-    # def retrieve_by_auction_id(self, request, auction_id=None):
-    #     try:
-    #         auction = Auction.objects.get(id=auction_id)
-    #         serializer = self.serializer_class(auction)
-    #         return Response(serializer.data)
-    #     except Auction.DoesNotExist:
-    #         return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
+    @action(detail=False, methods=['get'])
+    def retrieve_by_auction_id(self, request, auction_id=None):
+        try:
+            auction = Auction.objects.get(id=auction_id)
+            serializer = self.serializer_class(auction)
+            return Response(serializer.data)
+        except Auction.DoesNotExist:
+            return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
 
 
 
@@ -233,16 +233,27 @@ class BidsViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Bid.objects.filter(auction_id=self.kwargs['auction_pk'])
+
     
+    # def get_serializer_context(self):
+    #     customer = Customer.objects.get(user_id=self.request.user.id)
+    #     return {
+    #         'auction_id': self.kwargs['auction_pk'],
+    #         'bidder_id': customer.id
+    #     }
+
     def get_serializer_context(self):
-        customer = Customer.objects.get(user_id=self.request.user.id)
-        return {
-            'auction_id': self.kwargs['auction_pk'],
-            'bidder_id': customer.id
-        }
-
-
-
+        context =  super().get_serializer_context()
+        auction_id = self.kwargs.get('auction_pk')
+        
+        if auction_id:
+            context['auction_id'] = auction_id
+        
+        if self.request.user.is_authenticated:
+            customer = Customer.objects.get(user_id=self.request.user.id)
+            context['bidder_id'] = customer.id
+            
+        return context
 
 class DeliveryViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
