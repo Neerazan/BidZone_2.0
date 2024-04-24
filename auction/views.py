@@ -232,15 +232,15 @@ class BidsViewSet(ModelViewSet):
     serializer_class = BidsSerializer
 
     def get_queryset(self):
-        return Bid.objects.filter(auction_id=self.kwargs['auction_pk'])
+        return Bid.objects.select_related('bidder__user').filter(auction_id=self.kwargs['auction_pk'])
 
     
-    # def get_serializer_context(self):
-    #     customer = Customer.objects.get(user_id=self.request.user.id)
-    #     return {
-    #         'auction_id': self.kwargs['auction_pk'],
-    #         'bidder_id': customer.id
-    #     }
+    def get_serializer_context(self):
+        customer = Customer.objects.get(user_id=self.request.user.id)
+        return {
+            'auction_id': self.kwargs['auction_pk'],
+            'bidder_id': customer.id
+        }
 
     def get_serializer_context(self):
         context =  super().get_serializer_context()

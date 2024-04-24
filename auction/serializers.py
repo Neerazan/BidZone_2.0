@@ -71,6 +71,11 @@ class SimpleCustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['id', 'first_name', 'last_name']
 
+class BidsCustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['first_name']
+
 
 class SimpleProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
@@ -163,9 +168,10 @@ class CustomerCoinSerializer(serializers.ModelSerializer):
 
 
 class BidsSerializer(serializers.ModelSerializer):
+    bidder = BidsCustomerSerializer(read_only=True)
     class Meta:
         model = Bid
-        fields = ['id', 'auction_id', 'bidder_id', 'amount', 'status']
+        fields = ['id', 'auction_id', 'bidder', 'amount', 'status', 'created_at']
     
 
     def validate_amount(self, value):
