@@ -85,13 +85,21 @@ class SimpleProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'customer', 'slug', 'description', 'price', 'images']
 
 
+class AuctionSerializer(serializers.ModelSerializer):
+    product = SimpleProductSerializer()
+    bids_count = serializers.IntegerField(read_only=True)
+    class Meta:
+        model = Auction
+        fields = ['id', 'product', 'current_price', 'bids_count', 'starting_time', 'ending_time', 'auction_status']
+
+
 
 
 class WishlistItemSerializer(serializers.ModelSerializer):
-    product = SimpleProductSerializer()
+    auction = AuctionSerializer(read_only=True  )
     class Meta:
         model = WishlistItem
-        fields = ['id', 'product']
+        fields = ['id', 'auction']
 
 
 
@@ -126,16 +134,6 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = WishlistItem
         fields = ['id', 'auction_id']
-
-
-
-
-class AuctionSerializer(serializers.ModelSerializer):
-    product = SimpleProductSerializer()
-    bids_count = serializers.IntegerField(read_only=True)
-    class Meta:
-        model = Auction
-        fields = ['id', 'product', 'current_price', 'bids_count', 'starting_time', 'ending_time', 'auction_status']
 
 
 

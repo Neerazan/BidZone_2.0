@@ -139,7 +139,7 @@ class WishlistViewSet(ModelViewSet):
     search_fields = ['id']
     ordering_fields = ['created_at']
 
-    queryset = Wishlist.objects.prefetch_related('items__product').all()
+    queryset = Wishlist.objects.prefetch_related('items__auction').all()
     serializer_class = WishlistSerializer
 
 
@@ -148,7 +148,7 @@ class WishlistViewSet(ModelViewSet):
 class WishlistItemViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     pagination_class = DefaultPagination
-    search_fields = ['product__title']
+    # search_fields = ['auction__product__title']
     ordering_fields = ['created_at']
     filterset_class = WishListItemFilter
     http_method_names = ['get', 'post', 'delete'] #it is case sensative
