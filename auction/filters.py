@@ -14,5 +14,5 @@ class WishListItemFilter(FilterSet):
     class Meta:
         model = WishlistItem
         fields = {
-            'product__price': ['gt', 'lt']
+            'auction__product__price': ['gt', 'lt']
         }

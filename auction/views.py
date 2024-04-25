@@ -161,7 +161,7 @@ class WishlistItemViewSet(ModelViewSet):
     def get_queryset(self):
         return WishlistItem.objects \
             .filter(wishlist_id=self.kwargs['wishlist_pk']) \
-            .select_related('product')
+            .select_related('auction')
 
     def get_serializer_context(self):
         return {'wishlist_id': self.kwargs['wishlist_pk']}

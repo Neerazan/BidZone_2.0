@@ -100,24 +100,24 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 class WishlistSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
     items = WishlistItemSerializer(many=True, read_only=True)
-    total_price = serializers.SerializerMethodField()
+    # total_price = serializers.SerializerMethodField()
 
-    def get_total_price(self, wishlist):
-        return sum([item.product.price for item in wishlist.items.all()])
+    # def get_total_price(self, wishlist):
+    #     return sum([item.product.price for item in wishlist.items.all()])
     class Meta:
         model = Wishlist
-        fields = ['id', 'items', 'total_price']
+        fields = ['id', 'items']
 
 
 
 
 
 class AddWishlistItemSerializer(serializers.ModelSerializer):
-    product_id = serializers.IntegerField()
+    auction_id = serializers.IntegerField()
 
-    def validate_product_id(self, value):
-        if not Product.objects.filter(pk=value).exists():
-            raise serializers.ValidationError('No product with this ID was found.')
+    def validate_auction_id(self, value):
+        if not Auction.objects.filter(pk=value).exists():
+            raise serializers.ValidationError('No Auction with this ID was found.')
         return value
     
     def save(self, **kwargs):
@@ -125,7 +125,7 @@ class AddWishlistItemSerializer(serializers.ModelSerializer):
         return WishlistItem.objects.create(wishlist_id=wishlist_id, **self.validated_data)
     class Meta:
         model = WishlistItem
-        fields = ['id', 'product_id']
+        fields = ['id', 'auction_id']
 
 
 
