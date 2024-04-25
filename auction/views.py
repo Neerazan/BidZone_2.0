@@ -232,7 +232,7 @@ class BidsViewSet(ModelViewSet):
     serializer_class = BidsSerializer
 
     def get_queryset(self):
-        return Bid.objects.select_related('bidder__user').filter(auction_id=self.kwargs['auction_pk']).order_by('-created_at')
+        return Bid.objects.select_related('bidder__user').filter(auction_id=self.kwargs['auction_pk']).order_by('-updated_at')
 
     
     def get_serializer_context(self):
