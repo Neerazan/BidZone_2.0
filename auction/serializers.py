@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from decimal import Decimal
 from .models import *
+from django.db.models import Q
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -209,13 +210,23 @@ class BidsSerializer(serializers.ModelSerializer):
         bidder = self.context.get('bidder_id')
         balance = UserCoin.objects.get(customer=bidder).balance
 
+
         if value <= current_price:
             raise serializers.ValidationError("Bid Amount Must be grater than the current bid amount")
 
-        if balance < value:
-            raise serializers.ValidationError("You don't have enough balance to bid")
-        
+
+        user_bid_exist = Bid.objects.filter(Q(auction_id=auction_id) & Q(bidder_id=bidder))
+        if user_bid_exist.exists():
+            value = value - user_bid_exist.first().amount
+            if balance < value:
+                raise serializers.ValidationError("You don't have enough balance to bid")
+            
+        else:
+            if balance < value:
+                raise serializers.ValidationError("You don't have enough balance to bid")
+
         return value
+
 
 
     def create(self, validated_data):
@@ -231,3 +242,15 @@ class BidsSerializer(serializers.ModelSerializer):
         customr_balance.save()
 
         return Bid.objects.create(bidder_id=bidder_id, auction_id=auction_id, **validated_data)
+
+
+    def update(self, instance, validated_data):
+        auction = Auction.objects.get(pk=instance.auction_id)
+        auction.current_price = validated_data['amount']
+        auction.save()
+
+        customr_balance = UserCoin.objects.get(customer=instance.bidder_id)
+        customr_balance.balance = customr_balance.balance + instance.amount - validated_data['amount']
+        customr_balance.save()
+
+        return super().update(instance, validated_data)
