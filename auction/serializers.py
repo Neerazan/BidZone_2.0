@@ -71,10 +71,14 @@ class SimpleCustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ['id', 'first_name', 'last_name']
 
+
+
 class BidsCustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ['id', 'first_name']
+
+
 
 
 class SimpleProductSerializer(serializers.ModelSerializer):
@@ -83,6 +87,18 @@ class SimpleProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'customer', 'slug', 'description', 'price', 'images']
+
+
+
+
+class WishlistProductSerializer(serializers.ModelSerializer):
+    images = ProductImageSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = ['title', 'slug', 'images']
+
+
 
 
 class AuctionSerializer(serializers.ModelSerializer):
@@ -95,8 +111,20 @@ class AuctionSerializer(serializers.ModelSerializer):
 
 
 
+
+class WishlistAuctionSerializer(serializers.ModelSerializer):
+    product = WishlistProductSerializer(read_only=True)
+    bids_count = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Auction
+        fields = ['id', 'product', 'current_price', 'bids_count', 'starting_time', 'ending_time', 'auction_status']
+
+
+
+
 class WishlistItemSerializer(serializers.ModelSerializer):
-    auction = AuctionSerializer(read_only=True  )
+    auction = WishlistAuctionSerializer(read_only=True)
     class Meta:
         model = WishlistItem
         fields = ['id', 'auction']
@@ -159,10 +187,12 @@ class DeliverySerializer(serializers.ModelSerializer):
         fields = ['id', 'auction_id', 'customer_id', 'status', 'tracking_number', 'delivery_date']
 
 
+
 class CustomerCoinSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserCoin
         fields = ['customer_id', 'balance']
+
 
 
 class BidsSerializer(serializers.ModelSerializer):

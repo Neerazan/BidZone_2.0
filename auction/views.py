@@ -52,8 +52,7 @@ class ProductViewSet(ModelViewSet):
     ordering_fields = ['price', 'updated_at']
 
     def get_queryset(self):
-        return Product.objects.select_related('customer').prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
-        # raise PermissionDenied("You do not have permission to access this resource.")
+        return Product.objects.filter(customer_id=self.kwargs['customer_pk'])
 
 
     def destroy(self, request, *args, **kwargs):
@@ -187,7 +186,7 @@ class AuctionViewSet(ModelViewSet):
     serializer_class = AuctionSerializer
 
     def get_queryset(self):
-        queryset = Auction.objects.select_related('product').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
+        queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
         queryset = queryset.annotate(bids_count=Count('bids'))
         return queryset
     
