@@ -154,7 +154,7 @@ class WishlistAdmin(admin.ModelAdmin):
 
 @admin.register(models.WishlistItem)
 class WishlistItemAdmin(admin.ModelAdmin):
-    list_display = ['wishlist', 'auction']
+    list_display = ['id', 'wishlist', 'auction']
 
 
 @admin.register(models.UserCoin)
