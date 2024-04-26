@@ -135,14 +135,15 @@ class WishlistItemSerializer(serializers.ModelSerializer):
 
 class WishlistSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(read_only=True)
-    items = WishlistItemSerializer(many=True, read_only=True)
+    # items = WishlistItemSerializer(many=True, read_only=True)
     # total_price = serializers.SerializerMethodField()
 
     # def get_total_price(self, wishlist):
     #     return sum([item.product.price for item in wishlist.items.all()])
     class Meta:
         model = Wishlist
-        fields = ['id', 'items']
+        # fields = ['id', 'items']
+        fields = ['id']
 
 
 

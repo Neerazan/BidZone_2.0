@@ -138,7 +138,7 @@ class WishlistViewSet(ModelViewSet):
     search_fields = ['id']
     ordering_fields = ['created_at']
 
-    queryset = Wishlist.objects.prefetch_related('items__auction').all()
+    queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
 
 
@@ -160,7 +160,8 @@ class WishlistItemViewSet(ModelViewSet):
     def get_queryset(self):
         return WishlistItem.objects \
             .filter(wishlist_id=self.kwargs['wishlist_pk']) \
-            .select_related('auction')
+            .select_related('auction') \
+            .prefetch_related('auction__product__images')
 
     def get_serializer_context(self):
         return {'wishlist_id': self.kwargs['wishlist_pk']}
@@ -178,6 +179,7 @@ class ProductImageViewSet(ModelViewSet):
         return {
             'product_id': self.kwargs['product_pk']
         }
+
 
 
 
@@ -210,6 +212,7 @@ class AuctionViewSet(ModelViewSet):
 
 
 
+
 class AuctionChatViewSet(ModelViewSet):
     serializer_class = AuctionChatSerializer
 
@@ -223,6 +226,7 @@ class AuctionChatViewSet(ModelViewSet):
             'auction_id': self.kwargs['auction_pk'],
             'customer_id': customer.id
         }
+
 
 
 
@@ -253,6 +257,9 @@ class BidsViewSet(ModelViewSet):
             context['bidder_id'] = customer.id
             
         return context
+
+
+
 
 class DeliveryViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
