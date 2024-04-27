@@ -217,13 +217,11 @@ class BidsSerializer(serializers.ModelSerializer):
 
         user_bid_exist = Bid.objects.filter(Q(auction_id=auction_id) & Q(bidder_id=bidder_id))
         if user_bid_exist.exists():
-            print(">>>>>>>>>::: Inside If")
             existing_bid_amount = user_bid_exist.first().amount
             if balance < (value - existing_bid_amount):
                 raise serializers.ValidationError("You don't have enough balance to bid")
             
         else:
-            print(">>>>>>>>>::: Inside Else")
             if balance < value:
                 raise serializers.ValidationError("You don't have enough balance to bid")
 
