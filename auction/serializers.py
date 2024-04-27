@@ -207,21 +207,23 @@ class BidsSerializer(serializers.ModelSerializer):
     def validate_amount(self, value):
         auction_id = self.context.get('auction_id')
         current_price = Auction.objects.get(id=auction_id).current_price
-        bidder = self.context.get('bidder_id')
-        balance = UserCoin.objects.get(customer=bidder).balance
+        bidder_id = self.context.get('bidder_id')
+        balance = UserCoin.objects.get(customer=bidder_id).balance
 
 
         if value <= current_price:
             raise serializers.ValidationError("Bid Amount Must be grater than the current bid amount")
 
 
-        user_bid_exist = Bid.objects.filter(Q(auction_id=auction_id) & Q(bidder_id=bidder))
+        user_bid_exist = Bid.objects.filter(Q(auction_id=auction_id) & Q(bidder_id=bidder_id))
         if user_bid_exist.exists():
-            value = value - user_bid_exist.first().amount
-            if balance < value:
+            print(">>>>>>>>>::: Inside If")
+            existing_bid_amount = user_bid_exist.first().amount
+            if balance < (value - existing_bid_amount):
                 raise serializers.ValidationError("You don't have enough balance to bid")
             
         else:
+            print(">>>>>>>>>::: Inside Else")
             if balance < value:
                 raise serializers.ValidationError("You don't have enough balance to bid")
 
@@ -246,11 +248,12 @@ class BidsSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         auction = Auction.objects.get(pk=instance.auction_id)
-        auction.current_price = validated_data['amount']
+        difference = validated_data['amount'] - instance.amount
+        auction.current_price += difference
         auction.save()
 
-        customr_balance = UserCoin.objects.get(customer=instance.bidder_id)
-        customr_balance.balance = customr_balance.balance + instance.amount - validated_data['amount']
-        customr_balance.save()
+        bidder_balance = UserCoin.objects.get(customer=instance.bidder_id)
+        bidder_balance.balance += instance.amount - validated_data['amount']
+        bidder_balance.save()
 
         return super().update(instance, validated_data)
