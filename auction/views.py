@@ -29,6 +29,27 @@ class CollectionViewSet(ModelViewSet):
     serializer_class = CollectionSerializer
     permission_classes = [IsAdminOrReadOnly]
 
+
+    @action(detail=False, methods=['get'])
+    def retrieve_by_title(self, request, title=None):
+        try:
+            collection = Collection.objects.annotate(products_count=Count('products')).get(title=title)
+            serializer = self.serializer_class(collection)
+            return Response(serializer.data)
+        except Collection.DoesNotExist:
+            return Response({"detail": "Collection not found."}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    @action(detail=False, methods=['get'])
+    def retrieve_by_id(self, request, id=None):
+        try:
+            collection = Collection.objects.annotate(products_count=Count('products')).get(pk=id)
+            serializer = self.serializer_class(collection)
+            return Response(serializer.data)
+        except Collection.DoesNotExist:
+            return Response({"detail": "Collection not found."}, status=status.HTTP_404_NOT_FOUND)
+
+
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
 
@@ -179,20 +200,6 @@ class ProductImageViewSet(ModelViewSet):
         return {
             'product_id': self.kwargs['product_pk']
         }
-
-
-# class CollectionViewSet(ModelViewSet):
-#     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-#     # pagination_class = DefaultPagination
-#     search_fields = ['title']
-#     ordering_fields = ['created_at', 'products_count']
-
-#     queryset = Collection.objects.annotate(products_count = Count('products')).all()
-#     serializer_class = CollectionSerializer
-#     permission_classes = [IsAdminOrReadOnly]
-
-#     def destroy(self, request, *args, **kwargs):
-#         return super().destroy(request, *args, **kwargs)
 
 
 
