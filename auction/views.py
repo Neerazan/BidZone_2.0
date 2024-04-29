@@ -14,7 +14,7 @@ from rest_framework.exceptions import NotFound, PermissionDenied
 from .models import *
 from .serializers import *
 
-from .filters import ProductFilter, WishListItemFilter
+from .filters import ProductFilter, WishListItemFilter, AuctionFilter
 from .pagination import DefaultPagination
 from .permissions import *
 
@@ -181,11 +181,28 @@ class ProductImageViewSet(ModelViewSet):
         }
 
 
+# class CollectionViewSet(ModelViewSet):
+#     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+#     # pagination_class = DefaultPagination
+#     search_fields = ['title']
+#     ordering_fields = ['created_at', 'products_count']
+
+#     queryset = Collection.objects.annotate(products_count = Count('products')).all()
+#     serializer_class = CollectionSerializer
+#     permission_classes = [IsAdminOrReadOnly]
+
+#     def destroy(self, request, *args, **kwargs):
+#         return super().destroy(request, *args, **kwargs)
 
 
 
 class AuctionViewSet(ModelViewSet):
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     serializer_class = AuctionSerializer
+
+    search_fields = ['product__title', 'product__collection__title']
+    ordering_fields = ['starting_time', 'current_price', 'bids_count']
+    filterset_class = AuctionFilter
 
     def get_queryset(self):
         queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
