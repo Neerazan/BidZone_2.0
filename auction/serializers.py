@@ -151,19 +151,52 @@ class WishlistSerializer(serializers.ModelSerializer):
 
 
 class AddWishlistItemSerializer(serializers.ModelSerializer):
-    auction_id = serializers.IntegerField()
+    auction = WishlistAuctionSerializer(read_only=True)
+    auction_id = serializers.IntegerField(write_only=True)
 
     def validate_auction_id(self, value):
         if not Auction.objects.filter(pk=value).exists():
             raise serializers.ValidationError('No Auction with this ID was found.')
         return value
-    
+
     def save(self, **kwargs):
         wishlist_id = self.context['wishlist_id']
-        return WishlistItem.objects.create(wishlist_id=wishlist_id, **self.validated_data)
+        auction_id = self.validated_data['auction_id']
+
+        if WishlistItem.objects.filter(Q(wishlist_id=wishlist_id) & Q(auction_id=auction_id)).exists():
+            raise serializers.ValidationError('This auction is already in the wishlist')
+        
+        wishlist_item = WishlistItem.objects.create(wishlist_id=wishlist_id, **self.validated_data)
+        return wishlist_item
+
     class Meta:
         model = WishlistItem
-        fields = ['id', 'auction_id']
+        fields = ['auction_id', 'auction']  # Include auction_id in the fields
+
+    def to_representation(self, instance):
+        # Call the superclass's to_representation method to get the initial representation
+        representation = super().to_representation(instance)
+        
+        # Use validated_data to access the auction_id safely
+        auction_id = self.validated_data.get('auction_id')
+        
+        # Now that you have the auction_id, you can fetch the Auction instance
+        if auction_id:
+            auction = Auction.objects.get(pk=auction_id)
+            # Serialize the Auction instance using the WishlistAuctionSerializer
+            auction_serialized = WishlistAuctionSerializer(auction).data
+            
+            # Update the representation with the serialized Auction data
+            representation['auction'] = auction_serialized
+        else:
+            # Handle the case where auction_id is not available
+            # This could involve setting a default value or handling the absence of auction_id differently
+            pass
+        
+        return representation
+
+
+
 
 
 
