@@ -30,19 +30,24 @@ wishlists_router.register('items', WishlistItemViewSet, basename='cart-items')
 auction_router = routers.NestedDefaultRouter(router, 'auctions', lookup='auction')
 auction_router.register('chats', AuctionChatViewSet, basename='auction-chats')
 auction_router.register('bids', BidsViewSet, basename='auction-bids')
+auction_router.register('questions', AuctionQuestionViewSet, basename='auction-questions')
+
+answer_router = routers.NestedDefaultRouter(auction_router, 'questions', lookup='question')
+answer_router.register('answers', AuctionAnswerViewSet, basename='question-answers')
 
 
 urlpatterns = (
     [
         path('auctions/<int:auction_id>/', AuctionViewSet.as_view({'get': 'retrieve_by_auction_id'}), name="auction_detail-id"),
         path('auctions/<slug:slug>/', AuctionViewSet.as_view({'get': 'retrieve_by_slug'}), name='auction-detail-slug'),
-        path('collections/<int:id>/', CollectionViewSet.as_view({'get': 'retrieve_by_id'}), name='collection-detail-id'),
+        path('collections/<int:id>/', CollectionViewSet.as_view({'get': 'retrieve_by_id'}), name='collection-detail-id')
         # path(r'^collections/(?P<title>[\w\s]+)/$', CollectionViewSet.as_view({'get': 'retrieve_by_title'}), name='collection-detail-title'),
     ] +
     router.urls +
     customer_router.urls +
     wishlists_router.urls +
     auction_router.urls +
-    products_router.urls
+    products_router.urls +
+    answer_router.urls
 )
 

@@ -164,10 +164,10 @@ class UserCoinAdmin(admin.ModelAdmin):
 
 @admin.register(models.Question)
 class AuctionQuestionAdmin(admin.ModelAdmin):
-    list_display = ['auction', 'customer', 'question']
+    list_display = ['id', 'auction', 'customer', 'question']
     # search_fields = ['question', 'answer']
     # autocomplete_fields = ['auction', 'customer']
 
 @admin.register(models.Answer)
 class AuctionAnswerAdmin(admin.ModelAdmin):
-    list_display = ['question_id', 'customer', 'answer']
+    list_display = ['id', 'question_id', 'customer', 'answer']

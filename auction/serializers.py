@@ -230,6 +230,22 @@ class CustomerCoinSerializer(serializers.ModelSerializer):
 
 
 
+
+class AuctionQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Question
+        fields = ['id', 'customer_id', 'question']
+
+
+class AuctionAnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['id', 'answer']
+
+
+
+
+
 class BidsSerializer(serializers.ModelSerializer):
     bidder = BidsCustomerSerializer(read_only=True)
     class Meta:
