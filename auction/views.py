@@ -294,10 +294,14 @@ class DeliveryViewSet(ModelViewSet):
 
 
 class AuctionQuestionViewSet(ModelViewSet):
-    queryset = Question.objects.all()
     serializer_class = AuctionQuestionSerializer
+
+    def get_queryset(self):
+        return Question.objects.filter(auction_id=self.kwargs['auction_pk'])
 
 
 class AuctionAnswerViewSet(ModelViewSet):
-    queryset = Answer.objects.all()
     serializer_class = AuctionAnswerSerializer
+
+    def get_queryset(self):
+        return Answer.objects.filter(question_id=self.kwargs['question_pk'])
