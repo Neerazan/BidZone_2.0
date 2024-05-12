@@ -37,7 +37,7 @@ urlpatterns = (
         path('auctions/<int:auction_id>/', AuctionViewSet.as_view({'get': 'retrieve_by_auction_id'}), name="auction_detail-id"),
         path('auctions/<slug:slug>/', AuctionViewSet.as_view({'get': 'retrieve_by_slug'}), name='auction-detail-slug'),
         path('collections/<int:id>/', CollectionViewSet.as_view({'get': 'retrieve_by_id'}), name='collection-detail-id'),
-        path(r'^collections/(?P<title>[\w\s]+)/$', CollectionViewSet.as_view({'get': 'retrieve_by_title'}), name='collection-detail-title'),
+        # path(r'^collections/(?P<title>[\w\s]+)/$', CollectionViewSet.as_view({'get': 'retrieve_by_title'}), name='collection-detail-title'),
     ] +
     router.urls +
     customer_router.urls +

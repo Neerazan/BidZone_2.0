@@ -160,3 +160,14 @@ class WishlistItemAdmin(admin.ModelAdmin):
 @admin.register(models.UserCoin)
 class UserCoinAdmin(admin.ModelAdmin):
     list_display = ['customer', 'balance']
+
+
+@admin.register(models.Question)
+class AuctionQuestionAdmin(admin.ModelAdmin):
+    list_display = ['auction', 'customer', 'question']
+    # search_fields = ['question', 'answer']
+    # autocomplete_fields = ['auction', 'customer']
+
+@admin.register(models.Answer)
+class AuctionAnswerAdmin(admin.ModelAdmin):
+    list_display = ['question_id', 'customer', 'answer']

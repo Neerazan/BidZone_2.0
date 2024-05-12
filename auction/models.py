@@ -253,3 +253,26 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.transaction_type} of {self.amount} by {self.user.user.get_username()}"
+    
+
+
+# Question and answer model for auction product
+class Question(models.Model):
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    question = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Question by {self.customer.user.get_username()} for {self.auction.product.title}"
+
+class Answer(models.Model):
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, related_name='answers')
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Answer by {self.customer.user.get_username()} for {self.question.auction.product.title}"
