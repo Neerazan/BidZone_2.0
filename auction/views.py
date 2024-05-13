@@ -302,8 +302,26 @@ class AuctionQuestionViewSet(ModelViewSet):
         return Question.objects.filter(auction_id=auction_id).prefetch_related('answers').select_related('customer__user')
 
 
+    def get_serializer_context(self):
+        auction_id = self.kwargs['auction_pk']
+        user_id = self.request.user.id
+        return {
+            'auction_id': auction_id,
+            'customer_id': user_id
+        }
+
+
 class AuctionAnswerViewSet(ModelViewSet):
     serializer_class = AuctionAnswerSerializer
 
     def get_queryset(self):
         return Answer.objects.filter(question_id=self.kwargs['question_pk'])
+    
+
+    def get_serializer_context(self):
+        question_id = self.kwargs['question_pk']
+        user_id = self.request.user.id
+        return {
+            'question_id': question_id,
+            'customer_id': user_id
+        }

@@ -234,13 +234,31 @@ class AuctionAnswerSerializer(serializers.ModelSerializer):
         model = Answer
         fields = ['id', 'answer', 'updated_at']
 
+    def create(self, validated_data):
+        try:
+            question_id = self.context.get('question_id')
+            customer_id = self.context.get('customer_id')
+            return Answer.objects.create(question_id=question_id, customer_id=customer_id, **validated_data)
+        except Exception as e:
+            raise serializers.ValidationError('An error occurred while creating the answer')
+
+
+
 class AuctionQuestionSerializer(serializers.ModelSerializer):
     answers = AuctionAnswerSerializer(many=True, read_only=True)
     customer = SimpleCustomerSerializer(read_only=True)
     class Meta:
         model = Question
         fields = ['id', 'customer', 'question', 'answers', 'updated_at']
+    
 
+    def create(self, validated_data):
+        try:
+            auction_id = self.context.get('auction_id')
+            customer_id = self.context.get('customer_id')
+            return Question.objects.create(auction_id=auction_id, customer_id=customer_id, **validated_data)
+        except Exception as e:
+            raise serializers.ValidationError('An error occurred while creating the question')
 
 
 
