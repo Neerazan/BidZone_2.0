@@ -1,5 +1,5 @@
-from django.db.models.aggregates import Count
 from django_filters.rest_framework import DjangoFilterBackend
+from django.db.models import Count
 from django.db.models.deletion import ProtectedError
 from django.db.models import Q
 
@@ -295,9 +295,11 @@ class DeliveryViewSet(ModelViewSet):
 
 class AuctionQuestionViewSet(ModelViewSet):
     serializer_class = AuctionQuestionSerializer
+    pagination_class = DefaultPagination
 
     def get_queryset(self):
-        return Question.objects.filter(auction_id=self.kwargs['auction_pk'])
+        auction_id = self.kwargs['auction_pk']
+        return Question.objects.filter(auction_id=auction_id).prefetch_related('answers').select_related('customer__user')
 
 
 class AuctionAnswerViewSet(ModelViewSet):

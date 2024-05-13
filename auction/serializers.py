@@ -229,19 +229,17 @@ class CustomerCoinSerializer(serializers.ModelSerializer):
         fields = ['customer_id', 'balance']
 
 
-
-
-class AuctionQuestionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Question
-        fields = ['id', 'customer_id', 'question']
-
-
 class AuctionAnswerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Answer
-        fields = ['id', 'answer']
+        fields = ['id', 'answer', 'updated_at']
 
+class AuctionQuestionSerializer(serializers.ModelSerializer):
+    answers = AuctionAnswerSerializer(many=True, read_only=True)
+    customer = SimpleCustomerSerializer(read_only=True)
+    class Meta:
+        model = Question
+        fields = ['id', 'customer', 'question', 'answers', 'updated_at']
 
 
 
