@@ -155,7 +155,7 @@ class CustomerViewSet(ModelViewSet):
 
 class WishlistViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    pagination_class = DefaultPagination
+    # pagination_class = DefaultPagination
     search_fields = ['id']
     ordering_fields = ['created_at']
 
@@ -167,7 +167,7 @@ class WishlistViewSet(ModelViewSet):
 
 class WishlistItemViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    pagination_class = DefaultPagination
+    # pagination_class = DefaultPagination
     # search_fields = ['auction__product__title']
     ordering_fields = ['created_at']
     filterset_class = WishListItemFilter
