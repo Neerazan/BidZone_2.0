@@ -113,8 +113,8 @@ class BidAdmin(admin.ModelAdmin):
 
 @admin.register(models.Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ['customer', 'province', 'district', 'city', 'street']
-    search_fields = ['province__istartswith', 'district__istartswith', 'city__istartswith', 'street__istartswith']
+    list_display = ['customer', 'province', 'district', 'municipality', 'street']
+    search_fields = ['province__istartswith', 'district__istartswith', 'municipality__istartswith', 'street__istartswith']
     list_filter = ['province']
 
 

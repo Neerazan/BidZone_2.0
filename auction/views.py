@@ -284,7 +284,11 @@ class BidsViewSet(ModelViewSet):
             context['bidder_id'] = customer.id
             
         return context
+    
 
+    # def auctions_bid(self, request, *args, **kwargs):
+    #     user_id = request.user.id
+    #     auction_ids = request.query
 
 
 
