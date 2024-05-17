@@ -332,3 +332,15 @@ class AuctionAnswerViewSet(ModelViewSet):
             'question_id': question_id,
             'customer_id': user_id
         }
+
+
+class AddressViewSet(ModelViewSet):
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        return Address.objects.filter(customer_id=self.kwargs['customer_pk'])
+
+    def get_serializer_context(self):
+        return {
+            'customer_id': self.kwargs['customer_pk']
+        }

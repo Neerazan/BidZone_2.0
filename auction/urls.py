@@ -16,7 +16,8 @@ customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='custo
 customer_router.register('reviews', ReviewViewSet, basename='customer-reviews')
 customer_router.register('deliveries', DeliveryViewSet, basename='customer-deliveries')
 customer_router.register('products', ProductViewSet, basename='customer-products')
-customer_router.register('customer_coins', CustomerCoinViewSet, basename="customer-coins")
+customer_router.register('customer_coins', CustomerCoinViewSet, basename='customer-coins'),
+customer_router.register('addresses', AddressViewSet, basename='customer-addresses')
 
 
 products_router = routers.NestedDefaultRouter(customer_router, 'products', lookup='product')

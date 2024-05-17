@@ -320,3 +320,9 @@ class BidsSerializer(serializers.ModelSerializer):
         bidder_balance.save()
 
         return super().update(instance, validated_data)
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['customer_id', 'province', 'district', 'municipality', 'ward', 'street', 'postal']
