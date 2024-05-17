@@ -257,6 +257,9 @@ class AuctionChatViewSet(ModelViewSet):
 
 class BidsViewSet(ModelViewSet):
     serializer_class = BidsSerializer
+    filter_backends = [SearchFilter]
+    search_fields =[ 'bidder__user__id' ]
+
 
     def get_queryset(self):
         return Bid.objects.select_related('bidder__user').filter(auction_id=self.kwargs['auction_pk']).order_by('-updated_at')
