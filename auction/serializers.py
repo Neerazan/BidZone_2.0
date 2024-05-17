@@ -66,7 +66,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     user_balance = serializers.SerializerMethodField()
     class Meta:
         model = Customer
-        fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'email', 'birth_date', 'membership', 'user_balance']
+        fields = ['id', 'user_id', 'first_name', 'last_name', 'username', 'phone', 'email', 'birth_date', 'membership', 'user_balance']
 
     def get_user_balance(self, obj):
         try:

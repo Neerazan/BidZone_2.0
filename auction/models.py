@@ -57,6 +57,10 @@ class Customer(models.Model):
     def email(self):
         return self.user.email
 
+    @admin.display(ordering='user__username')
+    def username(self):
+        return self.user.username
+
     class Meta:
         ordering = ['user__first_name']
 
