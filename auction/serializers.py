@@ -12,9 +12,6 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 
-
-
-
 class ProductImageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
@@ -58,13 +55,25 @@ class ReviewSerializer(serializers.ModelSerializer):
         return Review.objects.create(seller_id=seller_id, reviewer_id=reviewer_id, **validated_data)
 
 
+class CustomerCoinSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserCoin
+        fields = ['customer_id', 'balance']
 
 
 class CustomerSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(read_only=True)
+    user_balance = serializers.SerializerMethodField()
     class Meta:
         model = Customer
-        fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'birth_date', 'membership']
+        fields = ['id', 'user_id', 'first_name', 'last_name', 'phone', 'email', 'birth_date', 'membership', 'user_balance']
+
+    def get_user_balance(self, obj):
+        try:
+            user_coin = UserCoin.objects.get(customer=obj)
+            return user_coin.balance
+        except UserCoin.DoesNotExist:
+            return None 
 
 
 class SimpleCustomerSerializer(serializers.ModelSerializer):
@@ -221,12 +230,6 @@ class DeliverySerializer(serializers.ModelSerializer):
         model = Delivery
         fields = ['id', 'auction_id', 'customer_id', 'status', 'tracking_number', 'delivery_date']
 
-
-
-class CustomerCoinSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserCoin
-        fields = ['customer_id', 'balance']
 
 
 class AuctionAnswerSerializer(serializers.ModelSerializer):

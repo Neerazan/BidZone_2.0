@@ -52,13 +52,17 @@ class Customer(models.Model):
     @admin.display(ordering='user__last_name')
     def last_name(self):
         return self.user.last_name
+    
+    @admin.display(ordering='user__email')
+    def email(self):
+        return self.user.email
 
     class Meta:
         ordering = ['user__first_name']
 
 
 class UserCoin(models.Model):
-    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='coin_balance', primary_key=True)
+    customer = models.OneToOneField(Customer, on_delete=models.CASCADE, related_name='balance', primary_key=True)
     balance = models.PositiveIntegerField(default=10000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
