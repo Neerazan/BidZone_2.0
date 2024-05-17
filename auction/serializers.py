@@ -325,4 +325,4 @@ class BidsSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ['customer_id', 'province', 'district', 'municipality', 'ward', 'street', 'postal']
+        fields = ['customer_id', 'province', 'district', 'municipality', 'ward', 'tole', 'street', 'zip_code']
