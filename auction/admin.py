@@ -43,7 +43,7 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'price', 'collection_title']
+    list_display = ['id', 'title', 'price', 'collection_title', 'in_auction']
     list_select_related = ['collection'] #For optimization of query
     list_editable = ['price']
     autocomplete_fields = ['collection']

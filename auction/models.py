@@ -106,6 +106,7 @@ class Product(models.Model):
                                 )
     
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT, related_name='products')
+    in_auction = models.BooleanField(default=False)
     promotion = models.ManyToManyField(Promotion, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

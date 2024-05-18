@@ -96,7 +96,7 @@ class SimpleProductSerializer(serializers.ModelSerializer):
     customer = SimpleCustomerSerializer(read_only=True)
     class Meta:
         model = Product
-        fields = ['id', 'title', 'customer', 'slug', 'description', 'price', 'images']
+        fields = ['id', 'title', 'customer', 'slug', 'description', 'price', 'images', 'in_auction']
 
 
 
