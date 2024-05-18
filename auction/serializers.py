@@ -33,6 +33,9 @@ class ProductImageSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     collection = SimpleCollectionSerializer(read_only=True)
+    collection_id = serializers.PrimaryKeyRelatedField(
+        queryset=Collection.objects.all(), write_only=True, source='collection'
+    )
 
     def validate_product_delete(self, value):
         if Auction.objects.filter(pk=value).exists():
@@ -41,12 +44,13 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'images', 'in_auction']
-    
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'collection_id', 'price', 'images', 'in_auction']
 
     def create(self, validated_data):
         customer_id = self.context.get('customer_id')
-        return Product.objects.create(customer_id=customer_id, **validated_data)
+        collection = validated_data.pop('collection')
+        return Product.objects.create(customer_id=customer_id, collection=collection, **validated_data)
+
 
 
 class BulkDeleteSerializer(serializers.Serializer):
