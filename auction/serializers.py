@@ -12,6 +12,12 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 
+class SimpleCollectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Collection
+        fields = ['id', 'title']
+
+
 class ProductImageSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
@@ -26,6 +32,7 @@ class ProductImageSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
+    collection = SimpleCollectionSerializer(read_only=True)
 
     def validate_product_delete(self, value):
         if Auction.objects.filter(pk=value).exists():
@@ -34,7 +41,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'images']
+        fields = ['id', 'title', 'description', 'slug', 'collection', 'price', 'images', 'in_auction']
     
 
     def create(self, validated_data):

@@ -73,7 +73,7 @@ class ProductViewSet(ModelViewSet):
     ordering_fields = ['price', 'updated_at']
 
     def get_queryset(self):
-        return Product.objects.filter(customer_id=self.kwargs['customer_pk'])
+        return Product.objects.select_related('collection').prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
 
 
     def destroy(self, request, *args, **kwargs):
