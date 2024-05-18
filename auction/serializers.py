@@ -49,6 +49,13 @@ class ProductSerializer(serializers.ModelSerializer):
         return Product.objects.create(customer_id=customer_id, **validated_data)
 
 
+class BulkDeleteSerializer(serializers.Serializer):
+    ids = serializers.ListField(
+        child=serializers.IntegerField(),
+        allow_empty=False,
+        write_only=True
+    )
+
 
 
 class ReviewSerializer(serializers.ModelSerializer):
