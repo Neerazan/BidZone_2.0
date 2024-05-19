@@ -54,6 +54,11 @@ class CollectionViewSet(ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
+
+
+
+
+
 class CustomerCoinViewSet(ModelViewSet):
     #TODO: allow only GET Method
     # http_method_names = ['get', 'head', 'options']
@@ -62,6 +67,10 @@ class CustomerCoinViewSet(ModelViewSet):
     def get_queryset(self):
         return UserCoin.objects.filter(customer_id=self.kwargs['customer_pk'])
     
+
+
+
+
 
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
@@ -141,6 +150,10 @@ class ProductViewSet(ModelViewSet):
 
 
 
+
+
+
+
 class ReviewViewSet(ModelViewSet):
     def get_queryset(self):
         return Review.objects.filter(seller_id=self.kwargs['customer_pk'])
@@ -156,6 +169,7 @@ class ReviewViewSet(ModelViewSet):
             'seller_id': self.kwargs['customer_pk'],
             'reviewer_id': reviewer.id
         }
+
 
 
 
@@ -195,6 +209,9 @@ class CustomerViewSet(ModelViewSet):
 
 
 
+
+
+
 class WishlistViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # pagination_class = DefaultPagination
@@ -203,6 +220,9 @@ class WishlistViewSet(ModelViewSet):
 
     queryset = Wishlist.objects.all()
     serializer_class = WishlistSerializer
+
+
+
 
 
 
@@ -232,6 +252,9 @@ class WishlistItemViewSet(ModelViewSet):
 
 
 
+
+
+
 class ProductImageViewSet(ModelViewSet):
     serializer_class = ProductImageSerializer
 
@@ -242,6 +265,9 @@ class ProductImageViewSet(ModelViewSet):
         return {
             'product_id': self.kwargs['product_pk']
         }
+
+
+
 
 
 
@@ -279,6 +305,9 @@ class AuctionViewSet(ModelViewSet):
 
 
 
+
+
+
 class AuctionChatViewSet(ModelViewSet):
     serializer_class = AuctionChatSerializer
 
@@ -292,6 +321,9 @@ class AuctionChatViewSet(ModelViewSet):
             'auction_id': self.kwargs['auction_pk'],
             'customer_id': customer.id
         }
+
+
+
 
 
 
@@ -334,6 +366,9 @@ class BidsViewSet(ModelViewSet):
 
 
 
+
+
+
 class DeliveryViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = DeliverySerializer
@@ -360,6 +395,10 @@ class AuctionQuestionViewSet(ModelViewSet):
         }
 
 
+
+
+
+
 class AuctionAnswerViewSet(ModelViewSet):
     serializer_class = AuctionAnswerSerializer
 
@@ -374,6 +413,10 @@ class AuctionAnswerViewSet(ModelViewSet):
             'question_id': question_id,
             'customer_id': user_id
         }
+
+
+
+
 
 
 class AddressViewSet(ModelViewSet):

@@ -343,7 +343,14 @@ class BidsSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
+
+
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ['customer_id', 'province', 'district', 'municipality', 'ward', 'tole', 'street', 'zip_code']
+    
+
+    def create(self, validated_data):
+        customer_id = self.context.get('customer_id')
+        return Address.objects.create(customer_id=customer_id, **validated_data)
