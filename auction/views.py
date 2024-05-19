@@ -260,11 +260,6 @@ class ProductImageViewSet(ModelViewSet):
 
     def get_queryset(self):
         return ProductImage.objects.filter(product_id=self.kwargs['product_pk'])
-    
-    def get_serializer_context(self):
-        return {
-            'product_id': self.kwargs['product_pk']
-        }
 
 
 
@@ -279,10 +274,25 @@ class AuctionViewSet(ModelViewSet):
     ordering_fields = ['starting_time', 'current_price', 'bids_count']
     filterset_class = AuctionFilter
 
+
+    def get_serializer(self, *args, **kwargs):
+        if self.action == 'create':
+            return CreateAuctionSerializer(*args, **kwargs)
+        return super().get_serializer(*args, **kwargs)
+
+
     def get_queryset(self):
-        queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
+        # queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
+
+        queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images')
         queryset = queryset.annotate(bids_count=Count('bids'))
         return queryset
+    
+
+    def get_serializer_context(self):
+        return {
+            'customer_id': self.request.user.id
+        }
     
     @action(detail=False, methods=['get'])
     def retrieve_by_slug(self, request, slug=None):

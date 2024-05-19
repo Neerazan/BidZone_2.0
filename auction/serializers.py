@@ -139,6 +139,25 @@ class AuctionSerializer(serializers.ModelSerializer):
 
 
 
+class CreateAuctionSerializer(serializers.ModelSerializer):
+    product_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Product.objects.all(), source='product')
+    # product_id = serializers.PrimaryKeyRelatedField()
+
+
+    class Meta:
+        model = Auction
+        fields = ['product_id', 'current_price', 'starting_time', 'ending_time', 'auction_status']
+
+
+    def validate_product_id(self, value):
+        if Auction.objects.filter(product_id=value).exists():
+            raise serializers.ValidationError('This product is already in auction')
+        elif self.context.get('customer_id') != value.customer_id and not self.context.get('is_superuser'):
+            raise serializers.ValidationError('You are not allowed to create auction for this product')
+        return value
+
+
+
 
 class WishlistAuctionSerializer(serializers.ModelSerializer):
     product = WishlistProductSerializer(read_only=True)

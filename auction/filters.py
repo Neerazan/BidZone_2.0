@@ -33,6 +33,7 @@ class AuctionFilter(django_filters.FilterSet):
             'product__collection': ['exact'],
             'current_price': ['gt', 'lt'],
             'auction_status': ['exact'],
+            'product__customer__id': ['exact'],
         }
 
     def filter_bids_count_min(self, queryset, name, value):
