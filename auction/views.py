@@ -274,10 +274,10 @@ class AuctionViewSet(ModelViewSet):
     ordering_fields = ['starting_time', 'current_price', 'bids_count']
     filterset_class = AuctionFilter
 
-    def get_serializer(self, *args, **kwargs):
-        if self.action == 'create':
-            return CreateAuctionSerializer(*args, **kwargs)
-        return super().get_serializer(*args, **kwargs)
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return CreateAuctionSerializer
+        return self.serializer_class
 
     def get_queryset(self):
         queryset = Auction.objects.select_related(
@@ -325,90 +325,6 @@ class AuctionViewSet(ModelViewSet):
                 return Response(serializer.data)
         except Auction.DoesNotExist:
             return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
-
-
-    
-    @action(detail=False, methods=['post'], url_path='bulk-delete', serializer_class=BulkDeleteSerializer)
-    def bulk_delete(self, request, *args, **kwargs):
-
-        serializers = self.get_serializer(data=request.data)
-        serializers.is_valid(raise_exception=True)
-
-        auction_ids = request.data.get('ids', [])
-        if not auction_ids:
-            return Response({
-                'detail': 'Auction ids is required.'
-            }, 
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-
-        auctions = Auction.objects.filter(id__in=auction_ids)
-        if not auctions:
-            return Response({
-                'detail': 'Auctions not found.'
-            },
-            status=status.HTTP_404_NOT_FOUND
-        )
-
-
-        try:
-            deleted_count, _ =  auctions.delete()
-            return Response({
-                'detail': f'Successfully deleted {deleted_count} auctions.'
-            },
-            status=status.HTTP_204_NO_CONTENT
-            )
-        except ProtectedError:
-            return Response({
-                "detail":"Can not delete auction because it is referenced by bid."
-            }, 
-            status=status.HTTP_400_BAD_REQUEST
-        )
-
-
-
-
-
-
-# @action(detail=False, methods=['post'], url_path='bulk-delete', serializer_class=BulkDeleteSerializer)
-#     def bulk_delete(self, request, *args, **kwargs):
-
-#         serializers = self.get_serializer(data=request.data)
-#         serializers.is_valid(raise_exception=True)
-
-#         product_ids = request.data.get('ids', [])
-#         if not product_ids:
-#             return Response({
-#                 'detail': 'Product ids is required.'
-#             }, 
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
-
-
-#         products = Product.objects.filter(id__in=product_ids, customer_id=self.kwargs['customer_pk'])
-#         if not products:
-#             return Response({
-#                 'detail': 'Products not found.'
-#             },
-#             status=status.HTTP_404_NOT_FOUND
-#         )
-
-
-#         try:
-#             deleted_count, _ =  products.delete()
-#             return Response({
-#                 'detail': f'Successfully deleted {deleted_count} products.'
-#             },
-#             status=status.HTTP_204_NO_CONTENT
-#             )
-#         except ProtectedError:
-#             return Response({
-#                 "detail":"Can not delete product because it is referenced by auction."
-#             }, 
-#             status=status.HTTP_400_BAD_REQUEST
-#         )
-
 
 
 

@@ -141,22 +141,36 @@ class AuctionSerializer(serializers.ModelSerializer):
 
 class CreateAuctionSerializer(serializers.ModelSerializer):
     product_id = serializers.PrimaryKeyRelatedField(write_only=True, queryset=Product.objects.all(), source='product')
-    # product_id = serializers.PrimaryKeyRelatedField()
 
 
     class Meta:
         model = Auction
-        fields = ['product_id', 'current_price', 'starting_time', 'ending_time', 'auction_status']
+        fields = ['product_id', 'starting_price', 'current_price', 'starting_time', 'ending_time', 'auction_status']
 
 
     def validate_product_id(self, value):
         if Auction.objects.filter(product_id=value).exists():
             raise serializers.ValidationError('This product is already in auction')
-        elif self.context.get('customer_id') != value.customer_id and not self.context.get('is_superuser'):
+        elif self.context.get('customer_id') != value.customer.id:
             raise serializers.ValidationError('You are not allowed to create auction for this product')
         return value
 
 
+    def create(self, validated_data):
+        product = Product.objects.get(pk=validated_data['product'].id)
+        starting_price = validated_data.get('starting_price', None)
+
+        # If starting price is not provided, set it to the product's price
+        if not starting_price:
+            starting_price = product.price
+            validated_data['starting_price'] = starting_price
+
+        # Set current price to starting price
+        validated_data['current_price'] = starting_price
+
+        # Create the auction
+        auction = Auction.objects.create(**validated_data)
+        return auction
 
 
 class WishlistAuctionSerializer(serializers.ModelSerializer):
