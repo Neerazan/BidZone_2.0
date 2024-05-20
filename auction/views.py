@@ -274,43 +274,58 @@ class AuctionViewSet(ModelViewSet):
     ordering_fields = ['starting_time', 'current_price', 'bids_count']
     filterset_class = AuctionFilter
 
-
     def get_serializer(self, *args, **kwargs):
         if self.action == 'create':
             return CreateAuctionSerializer(*args, **kwargs)
         return super().get_serializer(*args, **kwargs)
 
-
     def get_queryset(self):
-        # queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images').filter(Q(auction_status=Auction.AUCTION_ACTIVE) | Q(auction_status=Auction.AUCTION_SCHEDULE))
-
-        queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related('product__images')
+        queryset = Auction.objects.select_related(
+            'product', 'product__customer', 'product__customer__user'
+        ).prefetch_related('product__images')
         queryset = queryset.annotate(bids_count=Count('bids'))
         return queryset
-    
 
     def get_serializer_context(self):
-        return {
+        context = super().get_serializer_context()
+        context.update({
             'customer_id': self.request.user.id
-        }
-    
-    @action(detail=False, methods=['get'])
+        })
+        return context
+
+    @action(detail=True, methods=['get', 'put', 'delete'], permission_classes=[AllowAny])
     def retrieve_by_slug(self, request, slug=None):
         try:
             auction = Auction.objects.annotate(bids_count=Count('bids')).get(product__slug=slug)
-            serializer = self.serializer_class(auction)
-            return Response(serializer.data)
+            if request.method == 'DELETE':
+                auction.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            elif request.method == 'PUT':
+                # Handle update logic here
+                return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic
+            else:  # GET
+                serializer = self.serializer_class(auction)
+                return Response(serializer.data)
         except Auction.DoesNotExist:
             return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
-    
-    @action(detail=False, methods=['get'])
+
+
+    @action(detail=True, methods=['get', 'put'], permission_classes=[AllowAny])
     def retrieve_by_auction_id(self, request, auction_id=None):
         try:
-            auction = Auction.objects.get(id=auction_id)
-            serializer = self.serializer_class(auction)
-            return Response(serializer.data)
+            auction = Auction.objects.annotate(bids_count=Count('bids')).get(id=auction_id)
+            if request.method == 'DELETE':
+                auction.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            elif request.method == 'PUT':
+                # Handle update logic here
+                return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic
+            else:  # GET
+                serializer = self.serializer_class(auction)
+                return Response(serializer.data)
         except Auction.DoesNotExist:
             return Response({"detail": "Auction not found."}, status=status.HTTP_404_NOT_FOUND)
+
 
 
 

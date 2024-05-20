@@ -134,7 +134,7 @@ class AuctionSerializer(serializers.ModelSerializer):
     bids_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Auction
-        fields = ['id', 'product', 'current_price', 'bids_count', 'starting_time', 'ending_time', 'auction_status']
+        fields = ['id', 'product', 'starting_price', 'current_price', 'bids_count', 'starting_time', 'ending_time', 'auction_status']
 
 
 
