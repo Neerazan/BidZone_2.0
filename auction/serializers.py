@@ -158,7 +158,7 @@ class CreateAuctionSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
-        
+
         product = Product.objects.get(pk=validated_data['product'].id)
         starting_price = validated_data.get('starting_price', None)
 
@@ -345,7 +345,7 @@ class BidsSerializer(serializers.ModelSerializer):
             existing_bid_amount = user_bid_exist.first().amount
             if balance < (value - existing_bid_amount):
                 raise serializers.ValidationError("You don't have enough balance to bid")
-            
+        
         else:
             if balance < value:
                 raise serializers.ValidationError("You don't have enough balance to bid")

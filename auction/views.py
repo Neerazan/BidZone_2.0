@@ -311,7 +311,9 @@ class AuctionViewSet(ModelViewSet):
                 
             elif request.method == 'PUT':
                 # Handle update logic here
+                
                 return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic
+            
             else:  # GET
                 serializer = self.serializer_class(auction)
                 return Response(serializer.data)
@@ -335,8 +337,11 @@ class AuctionViewSet(ModelViewSet):
                     return Response(status=status.HTTP_204_NO_CONTENT)
                 
             elif request.method == 'PUT':
-                # Handle update logic here
-                return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic
+                auction_serializer = self.serializer_class(auction, data=request.data, partial=True)
+                auction_serializer.is_valid(raise_exception=True)
+                auction_serializer.save()
+                return Response(auction_serializer.data)
+
             else:  # GET
                 serializer = self.serializer_class(auction)
                 return Response(serializer.data)
@@ -364,8 +369,6 @@ class AuctionChatViewSet(ModelViewSet):
 
 
 
-
-
 class BidsViewSet(ModelViewSet):
     serializer_class = BidsSerializer
     filter_backends = [SearchFilter]
@@ -374,14 +377,7 @@ class BidsViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Bid.objects.select_related('bidder__user').filter(auction_id=self.kwargs['auction_pk']).order_by('-updated_at')
-
     
-    def get_serializer_context(self):
-        customer = Customer.objects.get(user_id=self.request.user.id)
-        return {
-            'auction_id': self.kwargs['auction_pk'],
-            'bidder_id': customer.id
-        }
 
     def get_serializer_context(self):
         context =  super().get_serializer_context()
@@ -395,11 +391,6 @@ class BidsViewSet(ModelViewSet):
             context['bidder_id'] = customer.id
             
         return context
-    
-
-    # def auctions_bid(self, request, *args, **kwargs):
-    #     user_id = request.user.id
-    #     auction_ids = request.query
 
 
 
