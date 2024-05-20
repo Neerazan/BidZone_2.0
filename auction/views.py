@@ -298,8 +298,17 @@ class AuctionViewSet(ModelViewSet):
         try:
             auction = Auction.objects.annotate(bids_count=Count('bids')).get(product__slug=slug)
             if request.method == 'DELETE':
-                auction.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                # Check if bids to this auction exist or not if exist can not delete
+                if auction.bids_count > 0:
+                    return Response({"detail": "Can not delete auction because it has bids."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                #If delete successful then change in_auction of product to false
+                if auction.delete():
+                    product = Product.objects.get(id=auction.product.id)
+                    product.in_auction = False
+                    product.save()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+                
             elif request.method == 'PUT':
                 # Handle update logic here
                 return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic
@@ -315,8 +324,16 @@ class AuctionViewSet(ModelViewSet):
         try:
             auction = Auction.objects.annotate(bids_count=Count('bids')).get(id=auction_id)
             if request.method == 'DELETE':
-                auction.delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                # Check if bids to this auction exist or not if exist can not delete
+                if auction.bids_count > 0:
+                    return Response({"detail": "Can not delete auction because it has bids."}, status=status.HTTP_400_BAD_REQUEST)
+                
+                if auction.delete():
+                    product = Product.objects.get(id=auction.product.id)
+                    product.in_auction = False
+                    product.save()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+                
             elif request.method == 'PUT':
                 # Handle update logic here
                 return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic

@@ -135,6 +135,7 @@ class AuctionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Auction
         fields = ['id', 'product', 'starting_price', 'current_price', 'bids_count', 'starting_time', 'ending_time', 'auction_status']
+    
 
 
 
@@ -157,6 +158,7 @@ class CreateAuctionSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
+        
         product = Product.objects.get(pk=validated_data['product'].id)
         starting_price = validated_data.get('starting_price', None)
 
@@ -170,6 +172,10 @@ class CreateAuctionSerializer(serializers.ModelSerializer):
 
         # Create the auction
         auction = Auction.objects.create(**validated_data)
+        if auction:
+            product.in_auction = True
+            product.save()
+    
         return auction
 
 
