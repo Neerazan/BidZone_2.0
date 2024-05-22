@@ -178,6 +178,14 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
+    'SEND_ACTIVATION_EMAIL': True,
+    'SEND_CONFIRMATION_EMAIL': True,
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
+
     'SERIALIZERS': {
         'user_create': 'core.serializers.UserCreateSerializer',
         'current_user': 'core.serializers.UserSerializer',
@@ -196,3 +204,12 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/1'), # Run every minute
     },
 }
+
+
+#Email COnfiguration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'neerajandhakal334@gmail.com'
+EMAIL_HOST_PASSWORD = 'qida kiwd rfis ffyy'
