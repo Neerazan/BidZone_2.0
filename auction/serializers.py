@@ -19,7 +19,6 @@ class SimpleCollectionSerializer(serializers.ModelSerializer):
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
-
     def create(self, validated_data):
         product_id = self.context['product_id']
         return ProductImage.objects.create(product_id=product_id, **validated_data)
@@ -370,7 +369,9 @@ class BidsSerializer(serializers.ModelSerializer):
 
 
     def update(self, instance, validated_data):
+
         auction = Auction.objects.get(pk=instance.auction_id)
+
         difference = validated_data['amount'] - instance.amount
         auction.current_price += difference
         auction.save()
