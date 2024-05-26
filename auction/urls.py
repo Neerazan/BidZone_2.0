@@ -9,7 +9,6 @@ router.register('collections', CollectionViewSet)
 router.register('customers', CustomerViewSet, basename='customer')
 router.register('wishlists', WishlistViewSet)
 router.register('auctions', AuctionViewSet, basename='auction')
-# router.register('products', ProductViewSet, basename='product')
 
 
 customer_router = routers.NestedDefaultRouter(router, 'customers', lookup='customer')
@@ -41,6 +40,5 @@ urlpatterns = [
     path('auctions/<int:auction_id>/', AuctionViewSet.as_view({'get': 'retrieve_by_auction_id', 'put': 'retrieve_by_auction_id', 'delete': 'retrieve_by_auction_id'}), name="auction_detail-id"),
     path('auctions/<slug:slug>/', AuctionViewSet.as_view({'get': 'retrieve_by_slug'}), name='auction-detail-slug'),
     path('collections/<int:id>/', CollectionViewSet.as_view({'get': 'retrieve_by_id'}), name='collection-detail-id'),
-    # path(r'^collections/(?P<title>[\w\s]+)/$', CollectionViewSet.as_view({'get': 'retrieve_by_title'}), name='collection-detail-title'),
 ] + router.urls + customer_router.urls + wishlists_router.urls + auction_router.urls + products_router.urls + answer_router.urls
 

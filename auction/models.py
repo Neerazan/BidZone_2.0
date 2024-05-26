@@ -288,3 +288,25 @@ class Answer(models.Model):
 
     def __str__(self):
         return f"Answer by {self.customer.user.get_username()} for {self.question.auction.product.title}"
+
+
+# Model for notification
+class Notification(models.Model):
+    NOTIFICATION_TYPE_INFO = 'I'
+    NOTIFICATION_TYPE_WARNING = 'W'
+    NOTIFICATION_TYPE_ERROR = 'E'
+
+    NOTIFICATION_TYPE_CHOICES = [
+        (NOTIFICATION_TYPE_INFO, 'Info'),
+        (NOTIFICATION_TYPE_WARNING, 'Warning'),
+        (NOTIFICATION_TYPE_ERROR, 'Error'),
+    ]
+
+    user = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    message = models.TextField()
+    notification_type = models.CharField(max_length=1, choices=NOTIFICATION_TYPE_CHOICES, default=NOTIFICATION_TYPE_INFO)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.notification_type} notification for {self.user.user.get_username()}"

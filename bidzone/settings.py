@@ -14,6 +14,8 @@ import os
 from pathlib import Path
 from datetime import timedelta
 from celery.schedules import crontab
+from dotenv import dotenv_values
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -93,8 +95,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'bidzone', 
-        'USER': 'postgres',
-        'PASSWORD': 'chlorine',
+        'USER': dotenv_values('.env')['DATABASE_USER'],
+        'PASSWORD': dotenv_values('.env')['DATABASE_PASSWORD'],
         'HOST': '127.0.0.1', 
         'PORT': '5432',
     }

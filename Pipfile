@@ -18,6 +18,7 @@ redis = "*"
 celery = "*"
 flower = "*"
 drf-yasg = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
