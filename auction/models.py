@@ -257,10 +257,22 @@ class Transaction(models.Model):
         (TRANSACTION_TYPE_REFUND, 'Refund'),
     ]
 
+    TRANSACTION_STATUS_COMPLETED = 'C'
+    TRANSACTION_STATUS_PENDING = 'P'
+    TRANSACTION_STATUS_CANCELLED = 'X'
+
+    TRANSACTION_STATUS_CHOICES = [
+        (TRANSACTION_STATUS_COMPLETED, 'Completed'),
+        (TRANSACTION_STATUS_PENDING, 'Pending'),
+        (TRANSACTION_STATUS_CANCELLED, 'Cancelled'),
+    ]
+
+    reference_id = models.UUIDField(default=uuid4)
+    invoice = models.CharField(max_length=255)
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_type = models.CharField(max_length=1,choices=TRANSACTION_TYPE_CHOICES)
-    reference_id = models.UUIDField(default=uuid4)
+    transaction_status = models.CharField(max_length=1, choices=TRANSACTION_STATUS_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

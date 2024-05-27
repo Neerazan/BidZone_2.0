@@ -86,6 +86,11 @@ class CustomerAdmin(admin.ModelAdmin):
         )
 
 
+@admin.register(models.Transaction)
+class TransactionAdmin(admin.ModelAdmin):
+    list_per_page = 10
+    list_display = ['reference_id', 'user', 'invoice', 'amount', 'transaction_type', 'transaction_status', 'created_at']
+
 @admin.register(models.Auction)
 class AuctionAdmin(admin.ModelAdmin):
     #TODO: Queryset Optimization
