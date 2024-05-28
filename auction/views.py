@@ -463,3 +463,9 @@ class AddressViewSet(ModelViewSet):
         return {
             'customer_id': self.kwargs['customer_pk']
         }
+
+
+
+class TransactionViewSet(ModelViewSet):
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.all()

@@ -11,7 +11,6 @@ class CollectionSerializer(serializers.ModelSerializer):
     products_count = serializers.IntegerField(read_only=True)
 
 
-
 class SimpleCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
@@ -394,3 +393,10 @@ class AddressSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         customer_id = self.context.get('customer_id')
         return Address.objects.create(customer_id=customer_id, **validated_data)
+
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['reference_id', 'invoice', 'user_id', 'transaction_type', 'transaction_status', 'created_at']
