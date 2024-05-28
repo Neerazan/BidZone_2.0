@@ -2,6 +2,7 @@ from rest_framework import serializers
 from decimal import Decimal
 from .models import *
 from django.db.models import Q
+from django.db import transaction
 
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -354,32 +355,55 @@ class BidsSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         auction_id = self.context.get('auction_id')
+        auction_title = self.context.get('auction_title')
         bidder_id = self.context.get('bidder_id')
+    
+        with transaction.atomic():
+            auction = Auction.objects.get(pk=auction_id)
+            auction.current_price = validated_data['amount']
+            auction.save()
 
-        auction = Auction.objects.get(pk=auction_id)
-        auction.current_price = validated_data['amount']
-        auction.save()
+            customr_balance = UserCoin.objects.get(customer=bidder_id)
+            customr_balance.balance = customr_balance.balance - validated_data['amount']
+            customr_balance.save()
 
-        customr_balance = UserCoin.objects.get(customer=bidder_id)
-        customr_balance.balance = customr_balance.balance - validated_data['amount']
-        customr_balance.save()
+            #Save Transaction
+            Transaction.objects.create(
+                invoice=f"Bids on {auction_title}",
+                user=bidder_id,
+                transaction_type=Transaction.TRANSACTION_TYPE_BID,
+                transaction_status=Transaction.TRANSACTION_STATUS_COMPLETED,
+                amount=validated_data['amount']
+            )
 
-        return Bid.objects.create(bidder_id=bidder_id, auction_id=auction_id, **validated_data)
+            return Bid.objects.create(bidder_id=bidder_id, auction_id=auction_id, **validated_data)
 
 
     def update(self, instance, validated_data):
 
-        auction = Auction.objects.get(pk=instance.auction_id)
+        with transaction.atomic():
+            auction = Auction.objects.get(pk=instance.auction_id)
+            auction_title = self.context.get('auction_title')
+            bidder = Customer.objects.get(pk=instance.bidder_id)
 
-        difference = validated_data['amount'] - instance.amount
-        auction.current_price += difference
-        auction.save()
+            difference = validated_data['amount'] - instance.amount
+            auction.current_price += difference
+            auction.save()
 
-        bidder_balance = UserCoin.objects.get(customer=instance.bidder_id)
-        bidder_balance.balance += instance.amount - validated_data['amount']
-        bidder_balance.save()
+            bidder_balance = UserCoin.objects.get(customer=instance.bidder_id)
+            bidder_balance.balance += instance.amount - validated_data['amount']
+            bidder_balance.save()
 
-        return super().update(instance, validated_data)
+            #Save Transaction
+            Transaction.objects.create(
+                invoice=f"Update Bids amount on {auction_title}",
+                user=bidder,
+                transaction_type=Transaction.TRANSACTION_TYPE_BID,
+                transaction_status=Transaction.TRANSACTION_STATUS_COMPLETED,
+                amount=validated_data['amount'] - instance.amount
+            )
+
+            return super().update(instance, validated_data)
 
 
 
@@ -399,4 +423,4 @@ class AddressSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['reference_id', 'invoice', 'user', 'transaction_type', 'transaction_status', 'created_at']
+        fields = ['reference_id', 'invoice', 'amount', 'transaction_type', 'transaction_status', 'created_at']

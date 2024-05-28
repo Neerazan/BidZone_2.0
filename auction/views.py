@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.exceptions import NotFound, PermissionDenied
+from django.db import transaction
 
 from .models import *
 from .serializers import *
@@ -391,6 +392,7 @@ class BidsViewSet(ModelViewSet):
         
         if auction_id:
             context['auction_id'] = auction_id
+            context['auction_title'] = Auction.objects.get(id=auction_id).product.title
         
         if self.request.user.is_authenticated:
             customer = Customer.objects.get(user_id=self.request.user.id)
