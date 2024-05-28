@@ -468,4 +468,7 @@ class AddressViewSet(ModelViewSet):
 
 class TransactionViewSet(ModelViewSet):
     serializer_class = TransactionSerializer
-    queryset = Transaction.objects.all()
+    http_method_names = ['get', 'head', 'options']
+    
+    def get_queryset(self):
+        return Transaction.objects.filter(user_id=self.kwargs['customer_pk'])

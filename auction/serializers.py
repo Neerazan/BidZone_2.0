@@ -399,4 +399,4 @@ class AddressSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['reference_id', 'invoice', 'user_id', 'transaction_type', 'transaction_status', 'created_at']
+        fields = ['reference_id', 'invoice', 'user', 'transaction_type', 'transaction_status', 'created_at']
