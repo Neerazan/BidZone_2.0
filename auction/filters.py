@@ -1,5 +1,5 @@
 from django_filters.rest_framework import FilterSet
-from .models import Product, WishlistItem, Auction
+from .models import Product, WishlistItem, Auction, Transaction
 
 from django.db.models import Count
 import django_filters
@@ -45,3 +45,14 @@ class AuctionFilter(django_filters.FilterSet):
         if value is not None:
             return queryset.annotate(bids_count=Count('bids')).filter(bids_count__lte=value)
         return queryset
+
+
+class TransactionFilter(django_filters.FilterSet):
+    class Meta:
+        model = Transaction
+        fields = {
+            'transaction_status': ['exact'],
+            'transaction_type': ['exact'],
+            'amount': ['gt', 'lt'],
+            'created_at': ['gt', 'lt']
+        }       

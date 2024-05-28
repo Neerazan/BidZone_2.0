@@ -90,6 +90,7 @@ class CustomerAdmin(admin.ModelAdmin):
 class TransactionAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = ['reference_id', 'user', 'invoice', 'amount', 'transaction_type', 'transaction_status', 'created_at']
+    list_editable = ['transaction_status', 'transaction_type']
 
 @admin.register(models.Auction)
 class AuctionAdmin(admin.ModelAdmin):

@@ -15,7 +15,7 @@ from django.db import transaction
 from .models import *
 from .serializers import *
 
-from .filters import ProductFilter, WishListItemFilter, AuctionFilter
+from .filters import ProductFilter, WishListItemFilter, AuctionFilter, TransactionFilter
 from .pagination import DefaultPagination
 from .permissions import *
 
@@ -471,6 +471,10 @@ class AddressViewSet(ModelViewSet):
 class TransactionViewSet(ModelViewSet):
     serializer_class = TransactionSerializer
     http_method_names = ['get', 'head', 'options']
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    search_fields = ['reference_id', 'invoice']
+    ordering_fields = ['created_at']
+    filterset_class = TransactionFilter
     
     def get_queryset(self):
         return Transaction.objects.filter(user_id=self.kwargs['customer_pk'])
