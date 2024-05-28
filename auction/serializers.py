@@ -357,6 +357,7 @@ class BidsSerializer(serializers.ModelSerializer):
         auction_id = self.context.get('auction_id')
         auction_title = self.context.get('auction_title')
         bidder_id = self.context.get('bidder_id')
+        bidder = Customer.objects.get(pk=bidder_id)
     
         with transaction.atomic():
             auction = Auction.objects.get(pk=auction_id)
@@ -370,7 +371,7 @@ class BidsSerializer(serializers.ModelSerializer):
             #Save Transaction
             Transaction.objects.create(
                 invoice=f"Bids on {auction_title}",
-                user=bidder_id,
+                user=bidder,
                 transaction_type=Transaction.TRANSACTION_TYPE_BID,
                 transaction_status=Transaction.TRANSACTION_STATUS_COMPLETED,
                 amount=validated_data['amount']
