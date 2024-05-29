@@ -56,3 +56,4 @@ class TransactionFilter(django_filters.FilterSet):
             'amount': ['gt', 'lt'],
             'created_at': ['gt', 'lt']
         }       
+        

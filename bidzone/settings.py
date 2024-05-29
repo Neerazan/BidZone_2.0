@@ -71,7 +71,9 @@ ROOT_URLCONF = 'bidzone.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'auction/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -191,7 +193,10 @@ DJOSER = {
     'SERIALIZERS': {
         'user_create': 'core.serializers.UserCreateSerializer',
         'current_user': 'core.serializers.UserSerializer',
-    }
+    },
+    'EMAIL': {
+        'activation': 'auction.email.ActivationEmail',
+    },
 }
 
 CELERY_BROKER_URL = 'redis://localhost:6379/1'
