@@ -188,7 +188,6 @@ DJOSER = {
     'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_RETYPE': True,
-    'PASSWORD_RESET_CONFIRM_RETYPE': True,
 
     'SERIALIZERS': {
         'user_create': 'core.serializers.UserCreateSerializer',
@@ -196,6 +195,7 @@ DJOSER = {
     },
     'EMAIL': {
         'activation': 'auction.email.ActivationEmail',
+        'password_reset': 'auction.email.PasswordResetEmail',
     },
 }
 
