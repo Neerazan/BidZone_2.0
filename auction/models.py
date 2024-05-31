@@ -152,7 +152,7 @@ class Bid(models.Model):
     bidder = models.ForeignKey(Customer, on_delete=models.CASCADE)
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name="bids")
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.BooleanField(default=False) #if true this is winning bid
+    status = models.BooleanField(default=True) #if true this is winning bid
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
