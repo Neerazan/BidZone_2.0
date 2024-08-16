@@ -11,7 +11,7 @@ admin.site.index_title = 'Admin Panel'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auction/', include('auction.urls')),
+    path('api/', include('auction.urls')),
     path('slider/', include('slider.urls')),
     path('core/', include('core.urls')),
     path('playground/', include('playground.urls')),
