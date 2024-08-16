@@ -12,6 +12,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser, I
 from rest_framework.exceptions import NotFound, PermissionDenied
 from django.db import transaction
 
+from drf_spectacular.utils import extend_schema
+
 from .models import *
 from .serializers import *
 
@@ -20,6 +22,7 @@ from .pagination import DefaultPagination
 from .permissions import *
 
 
+@extend_schema(tags=['Collection'])
 class CollectionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # pagination_class = DefaultPagination
@@ -59,7 +62,7 @@ class CollectionViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Customer Balance'])
 class CustomerCoinViewSet(ModelViewSet):
     #TODO: allow only GET Method
     # http_method_names = ['get', 'head', 'options']
@@ -72,7 +75,7 @@ class CustomerCoinViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Product'])
 class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -154,7 +157,7 @@ class ProductViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Review'])
 class ReviewViewSet(ModelViewSet):
     def get_queryset(self):
         return Review.objects.filter(seller_id=self.kwargs['customer_pk'])
@@ -174,7 +177,7 @@ class ReviewViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Customer'])
 class CustomerViewSet(ModelViewSet):
     serializer_class = CustomerSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -212,7 +215,7 @@ class CustomerViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Wishlist'])
 class WishlistViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # pagination_class = DefaultPagination
@@ -227,7 +230,7 @@ class WishlistViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Wishlist'])
 class WishlistItemViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     # pagination_class = DefaultPagination
@@ -255,7 +258,7 @@ class WishlistItemViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Product'])
 class ProductImageViewSet(ModelViewSet):
     serializer_class = ProductImageSerializer
 
@@ -271,7 +274,7 @@ class ProductImageViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Auction'])
 class AuctionViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     serializer_class = AuctionSerializer
@@ -357,6 +360,7 @@ class AuctionViewSet(ModelViewSet):
 
 
 
+@extend_schema(tags=['Auction Chat'])
 class AuctionChatViewSet(ModelViewSet):
     serializer_class = AuctionChatSerializer
 
@@ -373,9 +377,7 @@ class AuctionChatViewSet(ModelViewSet):
 
 
 
-
-
-
+@extend_schema(tags=['Bids'])
 class BidsViewSet(ModelViewSet):
     serializer_class = BidsSerializer
     filter_backends = [SearchFilter]
@@ -402,9 +404,7 @@ class BidsViewSet(ModelViewSet):
 
 
 
-
-
-
+@extend_schema(tags=['Delivery'])
 class DeliveryViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
     serializer_class = DeliverySerializer
@@ -413,6 +413,7 @@ class DeliveryViewSet(ModelViewSet):
         return Delivery.objects.filter(customer_id=self.kwargs['customer_pk'])
 
 
+@extend_schema(tags=['Auction Question'])
 class AuctionQuestionViewSet(ModelViewSet):
     serializer_class = AuctionQuestionSerializer
     pagination_class = DefaultPagination
@@ -432,9 +433,7 @@ class AuctionQuestionViewSet(ModelViewSet):
 
 
 
-
-
-
+@extend_schema(tags=['Auction Answer'])
 class AuctionAnswerViewSet(ModelViewSet):
     serializer_class = AuctionAnswerSerializer
 
@@ -454,7 +453,7 @@ class AuctionAnswerViewSet(ModelViewSet):
 
 
 
-
+@extend_schema(tags=['Customer'])
 class AddressViewSet(ModelViewSet):
     serializer_class = AddressSerializer
 
@@ -467,7 +466,7 @@ class AddressViewSet(ModelViewSet):
         }
 
 
-
+@extend_schema(tags=['Transaction'])
 class TransactionViewSet(ModelViewSet):
     serializer_class = TransactionSerializer
     http_method_names = ['get', 'head', 'options']
