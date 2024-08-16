@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'rest_framework',
     'djoser',
+    'drf_spectacular',
     'core',
     'auction',
     'playground',
@@ -170,9 +171,19 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
     #For global pagination
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     # 'PAGE_SIZE': 2
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'BidZone API',
+    'DESCRIPTION': 'API documentation of BidZone',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 
