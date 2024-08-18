@@ -19,6 +19,7 @@ celery = "*"
 flower = "*"
 python-dotenv = "*"
 drf-spectacular = "*"
+django-split-settings = "*"
 
 [dev-packages]
 
