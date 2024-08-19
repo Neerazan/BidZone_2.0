@@ -6,4 +6,4 @@ class AuctionConfig(AppConfig):
     name = 'src.auction'
 
     def ready(self) -> None:
-        import src.auction.signals
+        import src.auction.signals  # noqa: F401

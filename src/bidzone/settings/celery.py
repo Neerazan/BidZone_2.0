@@ -9,6 +9,6 @@ CELERY_BEAT_SCHEDULE = {
     # }
     'process-completed-auctions': {
         'task': 'auction.tasks.process_completed_auctions',
-        'schedule': crontab(minute='*/1'), # Run every minute
+        'schedule': crontab(minute='*/1'),  # Run every minute
     },
 }

@@ -1,6 +1,6 @@
-from django.db import models
-from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
 
 
 class TaggedItemManager(models.Manager):
@@ -13,6 +13,7 @@ class TaggedItemManager(models.Manager):
                 content_type=content_type,
                 object_id=obj_id
             )
+
 
 class Tag(models.Model):
     label = models.CharField(max_length=255)
