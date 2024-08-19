@@ -1,6 +1,6 @@
 import os
-from dotenv import dotenv_values
 
+from dotenv import dotenv_values
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = NotImplemented
@@ -8,9 +8,7 @@ SECRET_KEY = NotImplemented
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-
 ALLOWED_HOSTS = []
-
 
 # Application definition
 INSTALLED_APPS = [
@@ -21,7 +19,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
     # Third Party Apps
     'corsheaders',
     'django_filters',
@@ -29,7 +26,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_spectacular',
-
 
     # Custom Apps
     'src.core',
@@ -54,11 +50,15 @@ ROOT_URLCONF = 'src.bidzone.urls'
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'BACKEND':
+        'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            os.path.join(BASE_DIR, 'src/auction/templates'), #type: ignore
+            os.path.join(
+                BASE_DIR,  # type: ignore  # noqa:F821
+                'src/auction/templates'),  # type: ignore  # noqa:F821
         ],
-        'APP_DIRS': True,
+        'APP_DIRS':
+        True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -70,9 +70,7 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'src.bidzone.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
@@ -80,35 +78,38 @@ WSGI_APPLICATION = 'src.bidzone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'bidzone', 
+        'NAME': 'bidzone',
         'USER': dotenv_values('.env')['DATABASE_USER'],
         'PASSWORD': dotenv_values('.env')['DATABASE_PASSWORD'],
-        'HOST': '127.0.0.1', 
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
 INTERNAL_IPS = [
-    "127.0.0.1",
+    '127.0.0.1',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -117,7 +118,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
@@ -130,15 +130,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')  #type: ignore
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # type: ignore  # noqa:F821
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  #type: ignore
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # type: ignore  # noqa:F821
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -147,8 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'core.User'
 
-
-#Email COnfiguration
+# Email COnfiguration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587

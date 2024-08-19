@@ -1,9 +1,8 @@
-from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.viewsets import ModelViewSet
 
-
-#TODO: Decouple this app from Auction app later
+# TODO: Decouple this app from Auction app later
 from src.auction.permissions import IsAdminOrReadOnly
 
 from .models import Slider
@@ -16,6 +15,6 @@ class SliderViewSet(ModelViewSet):
     search_fields = ['title']
     ordering_fields = ['created_at', 'updated_at']
     permission_classes = [IsAdminOrReadOnly]
-    
+
     queryset = Slider.objects.filter(status=True)
     serializer_class = SliderSerializers
