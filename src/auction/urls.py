@@ -77,6 +77,11 @@ urlpatterns = (
             CollectionViewSet.as_view({'get': 'retrieve_by_id'}),
             name='collection-detail-id',
         ),
+        path(
+            'collections/<slug:slug>/',
+            CollectionViewSet.as_view({'get': 'retrieve_by_slug'}),
+            name='collection-detail-slug',
+        ),
     ]
     + router.urls
     + customer_router.urls

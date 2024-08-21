@@ -8,8 +8,11 @@ from . import models
 
 @admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
-    list_display = ['title', 'products_count']
+    list_display = ['title', 'slug', 'products_count']
     search_fields = ['title__istartswith', 'products_count']
+
+    # auto generated slug basead on title
+    prepopulated_fields = {'slug': ['title']}
 
     @admin.display(ordering='products_count')
     def products_count(self, collection):
@@ -39,14 +42,15 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'price', 'collection_title', 'in_auction']
+    list_display = ['title', 'price', 'collection_title', 'in_auction']
     list_select_related = ['collection']  # For optimization of query
     list_editable = ['price']
     autocomplete_fields = ['collection']
     list_per_page = 10
     search_fields = ['title__istartswith', 'price']
     list_filter = ['collection', 'updated_at']
-    prepopulated_fields = {'slug': ['title']}
+    # prepopulated_fields = {'slug': ['title']}
+    readonly_fields = ['slug']
     exclude = ['promotion']
 
     def collection_title(self, product):

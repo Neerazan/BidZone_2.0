@@ -8,7 +8,7 @@ from .models import *
 class CollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ['id', 'title', 'products_count']
+        fields = ['id', 'title', 'slug', 'products_count']
 
     products_count = serializers.IntegerField(read_only=True)
 
@@ -16,7 +16,7 @@ class CollectionSerializer(serializers.ModelSerializer):
 class SimpleCollectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collection
-        fields = ['id', 'title']
+        fields = ['id', 'slug', 'title']
 
 
 class ProductImageSerializer(serializers.ModelSerializer):
