@@ -6,6 +6,8 @@ from django.contrib import admin
 from django.core.validators import MinValueValidator
 from django.db import models
 
+from src.utils.slugs import generate_unique_slug
+
 from .validators import validate_file_size
 
 
@@ -16,11 +18,10 @@ class Promotion(models.Model):
 
 class Collection(models.Model):
     title = models.CharField(max_length=30)
-    feaured_product = models.ForeignKey('Product',
-                                        on_delete=models.SET_NULL,
-                                        null=True,
-                                        blank=True,
-                                        related_name='+')
+    feaured_product = models.ForeignKey(
+        'Product', on_delete=models.SET_NULL, null=True, blank=True, related_name='+'
+    )
+    slug = models.SlugField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -32,17 +33,18 @@ class Customer(models.Model):
     MEMBERSHIP_SILVER = 'S'
     MEMBERSHIP_GOLD = 'G'
 
-    MEMBERSHIP_CHOICES = [(MEMBERSHIP_BRONZE, 'Bronze'),
-                          (MEMBERSHIP_SILVER, 'Silver'),
-                          (MEMBERSHIP_GOLD, 'Gold')]
+    MEMBERSHIP_CHOICES = [
+        (MEMBERSHIP_BRONZE, 'Bronze'),
+        (MEMBERSHIP_SILVER, 'Silver'),
+        (MEMBERSHIP_GOLD, 'Gold'),
+    ]
 
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True, blank=True)
-    membership = models.CharField(max_length=1,
-                                  choices=MEMBERSHIP_CHOICES,
-                                  default=MEMBERSHIP_BRONZE)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL,
-                                on_delete=models.CASCADE)
+    membership = models.CharField(
+        max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE
+    )
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -68,10 +70,9 @@ class Customer(models.Model):
 
 
 class UserCoin(models.Model):
-    customer = models.OneToOneField(Customer,
-                                    on_delete=models.CASCADE,
-                                    related_name='balance',
-                                    primary_key=True)
+    customer = models.OneToOneField(
+        Customer, on_delete=models.CASCADE, related_name='balance', primary_key=True
+    )
     balance = models.PositiveIntegerField(default=10000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -91,9 +92,9 @@ class Address(models.Model):
     tole = models.CharField(max_length=255)
     zip_code = models.CharField(max_length=255)
     street = models.CharField(max_length=255)
-    customer = models.OneToOneField(Customer,
-                                    on_delete=models.CASCADE,
-                                    primary_key=True)
+    customer = models.OneToOneField(
+        Customer, on_delete=models.CASCADE, primary_key=True
+    )
 
     def __str__(self):
         return f"{self.customer.user.get_username()}'s Address"
@@ -104,20 +105,25 @@ class Address(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True)
     description = models.TextField(null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    price = models.DecimalField(max_digits=10,
-                                decimal_places=2,
-                                validators=[MinValueValidator(Decimal(1))])
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal(1))]
+    )
 
-    collection = models.ForeignKey(Collection,
-                                   on_delete=models.PROTECT,
-                                   related_name='products')
+    collection = models.ForeignKey(
+        Collection, on_delete=models.PROTECT, related_name='products'
+    )
     in_auction = models.BooleanField(default=False)
     promotion = models.ManyToManyField(Promotion, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = generate_unique_slug(self, self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -143,14 +149,14 @@ class Auction(models.Model):
 
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2)
-    current_price = models.DecimalField(max_digits=10,
-                                        decimal_places=2,
-                                        default=starting_price)
+    current_price = models.DecimalField(
+        max_digits=10, decimal_places=2, default=starting_price
+    )
     starting_time = models.DateTimeField()
     ending_time = models.DateTimeField()
-    auction_status = models.CharField(max_length=1,
-                                      choices=AUCTION_STATUS_CHOICES,
-                                      default=AUCTION_ACTIVE)
+    auction_status = models.CharField(
+        max_length=1, choices=AUCTION_STATUS_CHOICES, default=AUCTION_ACTIVE
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -163,9 +169,7 @@ class Auction(models.Model):
 
 class Bid(models.Model):
     bidder = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    auction = models.ForeignKey(Auction,
-                                on_delete=models.CASCADE,
-                                related_name='bids')
+    auction = models.ForeignKey(Auction, on_delete=models.CASCADE, related_name='bids')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.BooleanField(default=True)  # if true this is winning bid
     created_at = models.DateTimeField(auto_now_add=True)
@@ -179,11 +183,12 @@ class Bid(models.Model):
 
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product,
-                                on_delete=models.CASCADE,
-                                related_name='images')
-    image = models.ImageField(upload_to='auction/images',
-                              validators=[validate_file_size])
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='images'
+    )
+    image = models.ImageField(
+        upload_to='auction/images', validators=[validate_file_size]
+    )
 
     def __str__(self):
         return self.product.title
@@ -201,9 +206,9 @@ class Wishlist(models.Model):
 
 
 class WishlistItem(models.Model):
-    wishlist = models.ForeignKey(Wishlist,
-                                 on_delete=models.CASCADE,
-                                 related_name='items')
+    wishlist = models.ForeignKey(
+        Wishlist, on_delete=models.CASCADE, related_name='items'
+    )
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -219,17 +224,19 @@ class Delivery(models.Model):
     DELIVERY_STATUS_FAILED = 'F'
     DELIVERY_STATUS_POSTPONE = 'D'
 
-    DELIVERY_STATUS_COICES = [(DELIVERY_STATUS_PENDING, 'Pending'),
-                              (DELIVERY_STATUS_SHIPPED, 'Shipped'),
-                              (DELIVERY_STATUS_OFD, 'Out For Delivery'),
-                              (DELIVERY_STATUS_FAILED, 'Failed'),
-                              (DELIVERY_STATUS_POSTPONE, 'Postpone')]
+    DELIVERY_STATUS_COICES = [
+        (DELIVERY_STATUS_PENDING, 'Pending'),
+        (DELIVERY_STATUS_SHIPPED, 'Shipped'),
+        (DELIVERY_STATUS_OFD, 'Out For Delivery'),
+        (DELIVERY_STATUS_FAILED, 'Failed'),
+        (DELIVERY_STATUS_POSTPONE, 'Postpone'),
+    ]
 
     auction = models.ForeignKey(Auction, on_delete=models.CASCADE)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
-    status = models.CharField(max_length=1,
-                              choices=DELIVERY_STATUS_COICES,
-                              default=DELIVERY_STATUS_PENDING)
+    status = models.CharField(
+        max_length=1, choices=DELIVERY_STATUS_COICES, default=DELIVERY_STATUS_PENDING
+    )
     tracking_number = models.CharField(max_length=255, default='T001P')
     delivery_date = models.DateField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -243,12 +250,12 @@ class Delivery(models.Model):
 
 
 class Review(models.Model):
-    seller = models.ForeignKey(Customer,
-                               on_delete=models.CASCADE,
-                               related_name='received_reviews')
-    reviewer = models.ForeignKey(Customer,
-                                 on_delete=models.CASCADE,
-                                 related_name='written_reviews')
+    seller = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name='received_reviews'
+    )
+    reviewer = models.ForeignKey(
+        Customer, on_delete=models.CASCADE, related_name='written_reviews'
+    )
     description = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -292,10 +299,10 @@ class Transaction(models.Model):
     invoice = models.CharField(max_length=255)
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    transaction_type = models.CharField(max_length=1,
-                                        choices=TRANSACTION_TYPE_CHOICES)
-    transaction_status = models.CharField(max_length=1,
-                                          choices=TRANSACTION_STATUS_CHOICES)
+    transaction_type = models.CharField(max_length=1, choices=TRANSACTION_TYPE_CHOICES)
+    transaction_status = models.CharField(
+        max_length=1, choices=TRANSACTION_STATUS_CHOICES
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -315,9 +322,9 @@ class Question(models.Model):
 
 
 class Answer(models.Model):
-    question = models.ForeignKey(Question,
-                                 on_delete=models.CASCADE,
-                                 related_name='answers')
+    question = models.ForeignKey(
+        Question, on_delete=models.CASCADE, related_name='answers'
+    )
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     answer = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -341,11 +348,13 @@ class Notification(models.Model):
 
     user = models.ForeignKey(Customer, on_delete=models.CASCADE)
     message = models.TextField()
-    notification_type = models.CharField(max_length=1,
-                                         choices=NOTIFICATION_TYPE_CHOICES,
-                                         default=NOTIFICATION_TYPE_INFO)
+    notification_type = models.CharField(
+        max_length=1, choices=NOTIFICATION_TYPE_CHOICES, default=NOTIFICATION_TYPE_INFO
+    )
     is_read = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.notification_type} notification for {self.user.user.get_username()}'
+        return (
+            f'{self.notification_type} notification for {self.user.user.get_username()}'
+        )

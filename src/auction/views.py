@@ -28,11 +28,11 @@ class CollectionViewSet(ModelViewSet):
     permission_classes = [IsAdminOrReadOnly]
 
     @action(detail=False, methods=['get'])
-    def retrieve_by_title(self, request, title=None):
+    def retrieve_by_slug(self, request, slug=None):
         try:
             collection = Collection.objects.annotate(
                 products_count=Count('products')
-            ).get(title=title)
+            ).get(slug=slug)
             serializer = self.serializer_class(collection)
             return Response(serializer.data)
         except Collection.DoesNotExist:
