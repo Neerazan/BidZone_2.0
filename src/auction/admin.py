@@ -13,14 +13,15 @@ class CollectionAdmin(admin.ModelAdmin):
 
     @admin.display(ordering='products_count')
     def products_count(self, collection):
-        url = (reverse('admin:auction_product_changelist') + '?' +
-               urlencode({'collection__id': str(collection.id)}))
-        return format_html('<a href="{}">{}</a>', url,
-                           collection.products_count)
+        url = (
+            reverse('admin:auction_product_changelist')
+            + '?'
+            + urlencode({'collection__id': str(collection.id)})
+        )
+        return format_html('<a href="{}">{}</a>', url, collection.products_count)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).annotate(
-            products_count=Count('products'))
+        return super().get_queryset(request).annotate(products_count=Count('products'))
 
 
 class ProductImageInline(admin.TabularInline):
@@ -29,8 +30,7 @@ class ProductImageInline(admin.TabularInline):
 
     def thumbnail(self, instance):
         if instance.image.name != '':
-            return format_html(
-                f'<img src="{instance.image.url}" class="thumbnail"/>')
+            return format_html(f'<img src="{instance.image.url}" class="thumbnail"/>')
         return ''
 
     class Media:
@@ -58,9 +58,7 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(models.Customer)
 class CustomerAdmin(admin.ModelAdmin):
     list_per_page = 10
-    list_display = [
-        'id', 'first_name', 'last_name', 'membership', 'birth_date', 'bids'
-    ]
+    list_display = ['id', 'first_name', 'last_name', 'membership', 'birth_date', 'bids']
     list_editable = ['membership']
     list_select_related = ['user']
     # search_fields = ['first_name__istartswith', 'last_name__istartswith']
@@ -70,8 +68,11 @@ class CustomerAdmin(admin.ModelAdmin):
 
     @admin.display(ordering='bids_count')
     def bids(self, customer):
-        url = (reverse('admin:auction_bid_changelist') + '?' +
-               urlencode({'bidder__id': str(customer.id)}))
+        url = (
+            reverse('admin:auction_bid_changelist')
+            + '?'
+            + urlencode({'bidder__id': str(customer.id)})
+        )
         return format_html('<a href="{}">{}</a>', url, customer.bids_count)
 
     def get_queryset(self, request):
@@ -82,8 +83,13 @@ class CustomerAdmin(admin.ModelAdmin):
 class TransactionAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display = [
-        'reference_id', 'user', 'invoice', 'amount', 'transaction_type',
-        'transaction_status', 'created_at'
+        'reference_id',
+        'user',
+        'invoice',
+        'amount',
+        'transaction_type',
+        'transaction_status',
+        'created_at',
     ]
     list_editable = ['transaction_status', 'transaction_type']
 
@@ -94,13 +100,21 @@ class AuctionAdmin(admin.ModelAdmin):
 
     list_per_page = 10
     list_display = [
-        'product', 'starting_price', 'current_price', 'starting_time',
-        'ending_time', 'auction_status', 'total_bids'
+        'product',
+        'starting_price',
+        'current_price',
+        'starting_time',
+        'ending_time',
+        'auction_status',
+        'total_bids',
     ]
     list_editable = ['starting_price', 'current_price', 'auction_status']
     search_fields = [
-        'product__title', 'auction_status', 'ending_time', 'starting_price',
-        'current_price'
+        'product__title',
+        'auction_status',
+        'ending_time',
+        'starting_price',
+        'current_price',
     ]
     list_filter = ['auction_status']
     autocomplete_fields = ['product']
@@ -116,8 +130,10 @@ class BidAdmin(admin.ModelAdmin):
     list_display = ['bidder', 'auction', 'amount', 'status']
     list_editable = ['status', 'amount']
     search_fields = [
-        'amount', 'bidder__user__first_name', 'bidder__user__last_name',
-        'auction__product__title'
+        'amount',
+        'bidder__user__first_name',
+        'bidder__user__last_name',
+        'auction__product__title',
     ]
     autocomplete_fields = ['bidder', 'auction']
 
@@ -125,13 +141,23 @@ class BidAdmin(admin.ModelAdmin):
 @admin.register(models.Address)
 class AddressAdmin(admin.ModelAdmin):
     list_display = [
-        'customer', 'province', 'district', 'municipality', 'ward', 'tole',
-        'zip_code', 'street'
+        'customer',
+        'province',
+        'district',
+        'municipality',
+        'ward',
+        'tole',
+        'zip_code',
+        'street',
     ]
     search_fields = [
-        'province__istartswith', 'district__istartswith',
-        'municipality__istartswith', 'street__istartswith', 'zip_code', 'tole',
-        'ward'
+        'province__istartswith',
+        'district__istartswith',
+        'municipality__istartswith',
+        'street__istartswith',
+        'zip_code',
+        'tole',
+        'ward',
     ]
     list_filter = ['province']
 
@@ -146,13 +172,15 @@ class ChatAdmin(admin.ModelAdmin):
 @admin.register(models.Delivery)
 class DeliveryAdmin(admin.ModelAdmin):
     list_display = [
-        'auction', 'customer_id', 'status', 'tracking_number', 'delivery_date',
-        'created_at'
+        'auction',
+        'customer_id',
+        'status',
+        'tracking_number',
+        'delivery_date',
+        'created_at',
     ]
     list_editable = ['status']
-    search_fields = [
-        'status', 'tracking_number', 'delivery_date', 'created_at'
-    ]
+    search_fields = ['status', 'tracking_number', 'delivery_date', 'created_at']
     list_filter = ['status']
     autocomplete_fields = ['customer', 'auction']
 

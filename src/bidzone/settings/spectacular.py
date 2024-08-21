@@ -37,6 +37,10 @@ SPECTACULAR_SETTINGS = {
             'description': 'Customer related endpoints'
         },
         {
+            'name': 'Customer Address',
+            'description': 'Customer Address related endpoints'
+        },
+        {
             'name': 'Customer Balance',
             'description': 'Customer Balance related endpoints'
         },
