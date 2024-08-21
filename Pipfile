@@ -32,9 +32,9 @@ python_version = "3.10"
 multi_line_output = 5
 line_length = 130
 
-[tool.yapf]
-based_on_style = "google"
-align_closing_bracket_with_visual_indent = true
-coalesce_brackets = true
-column_limit = 130
-dedent_closing_brackets = true
+# [tool.yapf]
+# based_on_style = "google"
+# align_closing_bracket_with_visual_indent = true
+# coalesce_brackets = true
+# column_limit = 130
+# dedent_closing_brackets = true

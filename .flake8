@@ -6,6 +6,6 @@ filename = *.py
 accept-encodings = utf-8
 inline-quotes = single
 max-compexity = 12
-max-line-length = 130
 max-line-number = 500
+max-line-length = 130
 multiline-quotes = double
