@@ -30,28 +30,20 @@ class CollectionViewSet(ModelViewSet):
     @action(detail=False, methods=['get'])
     def retrieve_by_slug(self, request, slug=None):
         try:
-            collection = Collection.objects.annotate(
-                products_count=Count('products')
-            ).get(slug=slug)
+            collection = Collection.objects.annotate(products_count=Count('products')).get(slug=slug)
             serializer = self.serializer_class(collection)
             return Response(serializer.data)
         except Collection.DoesNotExist:
-            return Response(
-                {'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=['get'])
     def retrieve_by_id(self, request, id=None):  # noqa:A002
         try:
-            collection = Collection.objects.annotate(
-                products_count=Count('products')
-            ).get(pk=id)
+            collection = Collection.objects.annotate(products_count=Count('products')).get(pk=id)
             serializer = self.serializer_class(collection)
             return Response(serializer.data)
         except Collection.DoesNotExist:
-            return Response(
-                {'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
@@ -79,9 +71,7 @@ class ProductViewSet(ModelViewSet):
 
     def get_queryset(self):
         return (
-            Product.objects.select_related('collection')
-            .prefetch_related('images')
-            .filter(customer_id=self.kwargs['customer_pk'])
+            Product.objects.select_related('collection').prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
         )
 
     def destroy(self, request, *args, **kwargs):
@@ -114,13 +104,9 @@ class ProductViewSet(ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        products = Product.objects.filter(
-            id__in=product_ids, customer_id=self.kwargs['customer_pk']
-        )
+        products = Product.objects.filter(id__in=product_ids, customer_id=self.kwargs['customer_pk'])
         if not products:
-            return Response(
-                {'detail': 'Products not found.'}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({'detail': 'Products not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         try:
             deleted_count, _ = products.delete()
@@ -130,9 +116,7 @@ class ProductViewSet(ModelViewSet):
             )
         except ProtectedError:
             return Response(
-                {
-                    'detail': 'Can not delete product because it is referenced by auction.'
-                },
+                {'detail': 'Can not delete product because it is referenced by auction.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
@@ -171,9 +155,7 @@ class CustomerViewSet(ModelViewSet):
     filterset_fields = ['membership']
 
     def get_queryset(self):
-        return Customer.objects.select_related('user').filter(
-            user_id=self.request.user.id
-        )
+        return Customer.objects.select_related('user').filter(user_id=self.request.user.id)
 
     # def get_permissions(self):
     #     if self.request.method == 'GET':
@@ -263,9 +245,9 @@ class AuctionViewSet(ModelViewSet):
         return self.serializer_class
 
     def get_queryset(self):
-        queryset = Auction.objects.select_related(
-            'product', 'product__customer', 'product__customer__user'
-        ).prefetch_related('product__images')
+        queryset = Auction.objects.select_related('product', 'product__customer', 'product__customer__user').prefetch_related(
+            'product__images'
+        )
         queryset = queryset.annotate(bids_count=Count('bids'))
         return queryset
 
@@ -281,9 +263,7 @@ class AuctionViewSet(ModelViewSet):
     )
     def retrieve_by_slug(self, request, slug=None):
         try:
-            auction = Auction.objects.annotate(bids_count=Count('bids')).get(
-                product__slug=slug
-            )
+            auction = Auction.objects.annotate(bids_count=Count('bids')).get(product__slug=slug)
             if request.method == 'DELETE':
                 # Check if bids to this auction exist or not if exist can not delete
                 if auction.bids_count > 0:
@@ -302,17 +282,13 @@ class AuctionViewSet(ModelViewSet):
             elif request.method == 'PUT':
                 # Handle update logic here
 
-                return Response(
-                    status=status.HTTP_501_NOT_IMPLEMENTED
-                )  # Placeholder for PUT logic
+                return Response(status=status.HTTP_501_NOT_IMPLEMENTED)  # Placeholder for PUT logic
 
             else:  # GET
                 serializer = self.serializer_class(auction)
                 return Response(serializer.data)
         except Auction.DoesNotExist:
-            return Response(
-                {'detail': 'Auction not found.'}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({'detail': 'Auction not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     @action(
         detail=True,
@@ -321,9 +297,7 @@ class AuctionViewSet(ModelViewSet):
     )
     def retrieve_by_auction_id(self, request, auction_id=None):
         try:
-            auction = Auction.objects.annotate(bids_count=Count('bids')).get(
-                id=auction_id
-            )
+            auction = Auction.objects.annotate(bids_count=Count('bids')).get(id=auction_id)
             if request.method == 'DELETE':
                 # Check if bids to this auction exist or not if exist can not delete
                 if auction.bids_count > 0:
@@ -339,9 +313,7 @@ class AuctionViewSet(ModelViewSet):
                     return Response(status=status.HTTP_204_NO_CONTENT)
 
             elif request.method == 'PUT':
-                auction_serializer = self.serializer_class(
-                    auction, data=request.data, partial=True
-                )
+                auction_serializer = self.serializer_class(auction, data=request.data, partial=True)
                 auction_serializer.is_valid(raise_exception=True)
                 auction_serializer.save()
                 return Response(auction_serializer.data)
@@ -350,9 +322,7 @@ class AuctionViewSet(ModelViewSet):
                 serializer = self.serializer_class(auction)
                 return Response(serializer.data)
         except Auction.DoesNotExist:
-            return Response(
-                {'detail': 'Auction not found.'}, status=status.HTTP_404_NOT_FOUND
-            )
+            return Response({'detail': 'Auction not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @extend_schema(tags=['Auction Chat'])
@@ -375,11 +345,7 @@ class BidsViewSet(ModelViewSet):
     search_fields = ['bidder__user__id']
 
     def get_queryset(self):
-        return (
-            Bid.objects.select_related('bidder__user')
-            .filter(auction_id=self.kwargs['auction_pk'])
-            .order_by('-updated_at')
-        )
+        return Bid.objects.select_related('bidder__user').filter(auction_id=self.kwargs['auction_pk']).order_by('-updated_at')
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -412,11 +378,7 @@ class AuctionQuestionViewSet(ModelViewSet):
 
     def get_queryset(self):
         auction_id = self.kwargs['auction_pk']
-        return (
-            Question.objects.filter(auction_id=auction_id)
-            .prefetch_related('answers')
-            .select_related('customer__user')
-        )
+        return Question.objects.filter(auction_id=auction_id).prefetch_related('answers').select_related('customer__user')
 
     def get_serializer_context(self):
         auction_id = self.kwargs['auction_pk']

@@ -18,10 +18,8 @@ class WishListItemFilter(FilterSet):
 
 
 class AuctionFilter(django_filters.FilterSet):
-    min_bids_count = django_filters.NumberFilter(
-        method='filter_bids_count_min')
-    max_bids_count = django_filters.NumberFilter(
-        method='filter_bids_count_max')
+    min_bids_count = django_filters.NumberFilter(method='filter_bids_count_min')
+    max_bids_count = django_filters.NumberFilter(method='filter_bids_count_max')
 
     class Meta:
         model = Auction
@@ -34,14 +32,12 @@ class AuctionFilter(django_filters.FilterSet):
 
     def filter_bids_count_min(self, queryset, name, value):
         if value is not None:
-            return queryset.annotate(bids_count=Count('bids')).filter(
-                bids_count__gte=value)
+            return queryset.annotate(bids_count=Count('bids')).filter(bids_count__gte=value)
         return queryset
 
     def filter_bids_count_max(self, queryset, name, value):
         if value is not None:
-            return queryset.annotate(bids_count=Count('bids')).filter(
-                bids_count__lte=value)
+            return queryset.annotate(bids_count=Count('bids')).filter(bids_count__lte=value)
         return queryset
 
 
@@ -52,5 +48,5 @@ class TransactionFilter(django_filters.FilterSet):
             'transaction_status': ['exact'],
             'transaction_type': ['exact'],
             'amount': ['gt', 'lt'],
-            'created_at': ['gt', 'lt']
+            'created_at': ['gt', 'lt'],
         }
