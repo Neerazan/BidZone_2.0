@@ -18,19 +18,13 @@ customer_router.register('deliveries', DeliveryViewSet, basename='customer-deliv
 
 customer_router.register('products', ProductViewSet, basename='customer-products')
 
-customer_router.register(
-    'customer_coins', CustomerCoinViewSet, basename='customer-coins'
-)
+customer_router.register('customer_coins', CustomerCoinViewSet, basename='customer-coins')
 
 customer_router.register('addresses', AddressViewSet, basename='customer-addresses')
 
-customer_router.register(
-    'transactions', TransactionViewSet, basename='customer-transactions'
-)
+customer_router.register('transactions', TransactionViewSet, basename='customer-transactions')
 
-products_router = routers.NestedDefaultRouter(
-    customer_router, 'products', lookup='product'
-)
+products_router = routers.NestedDefaultRouter(customer_router, 'products', lookup='product')
 
 products_router.register('images', ProductImageViewSet, basename='product-images')
 
@@ -44,13 +38,9 @@ auction_router.register('chats', AuctionChatViewSet, basename='auction-chats')
 
 auction_router.register('bids', BidsViewSet, basename='auction-bids')
 
-auction_router.register(
-    'questions', AuctionQuestionViewSet, basename='auction-questions'
-)
+auction_router.register('questions', AuctionQuestionViewSet, basename='auction-questions')
 
-answer_router = routers.NestedDefaultRouter(
-    auction_router, 'questions', lookup='question'
-)
+answer_router = routers.NestedDefaultRouter(auction_router, 'questions', lookup='question')
 
 answer_router.register('answers', AuctionAnswerViewSet, basename='question-answers')
 

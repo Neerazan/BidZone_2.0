@@ -1,6 +1,6 @@
 .PHONY: install
 install:
-	@echo "Installing..."
+	@echo 'Installing...'
 	pipenv install
 
 
@@ -41,4 +41,4 @@ superuser:
 
 .PHONY: update
 update: install migrate;
-	@echo "Update Completed..."
+	@echo 'Update Completed...'

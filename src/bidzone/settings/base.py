@@ -18,7 +18,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     # Third Party Apps
     'corsheaders',
     'django_filters',
@@ -26,7 +25,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_spectacular',
-
     # Custom Apps
     'src.core',
     'src.auction',
@@ -50,15 +48,13 @@ ROOT_URLCONF = 'src.bidzone.urls'
 
 TEMPLATES = [
     {
-        'BACKEND':
-        'django.template.backends.django.DjangoTemplates',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(
-                BASE_DIR,  # type: ignore  # noqa:F821
-                'src/auction/templates'),  # type: ignore  # noqa:F821
+                BASE_DIR, 'src/auction/templates'  # type: ignore  # noqa:F821
+            ),  # type: ignore  # noqa:F821
         ],
-        'APP_DIRS':
-        True,
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -91,20 +87,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 

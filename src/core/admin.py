@@ -13,17 +13,24 @@ from .models import User
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
 
-    list_display = ('id', 'username', 'email', 'first_name', 'last_name',
-                    'is_staff')
+    list_display = ('id', 'username', 'email', 'first_name', 'last_name', 'is_staff')
 
-    add_fieldsets = ((
-        'User Information',
-        {
-            'classes': ('wide', ),
-            'fields': ('username', 'first_name', 'last_name', 'password1',
-                       'password2', 'email'),
-        },
-    ), )
+    add_fieldsets = (
+        (
+            'User Information',
+            {
+                'classes': ('wide',),
+                'fields': (
+                    'username',
+                    'first_name',
+                    'last_name',
+                    'password1',
+                    'password2',
+                    'email',
+                ),
+            },
+        ),
+    )
 
 
 # Decouple tags and auction app

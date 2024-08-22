@@ -20,18 +20,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Customer',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('phone', models.CharField(max_length=255)),
                 ('birth_date', models.DateField(blank=True, null=True)),
-                ('membership',
-                 models.CharField(choices=[('B', 'Bronze'), ('S', 'Silver'),
-                                           ('G', 'Gold')],
-                                  default='B',
-                                  max_length=1)),
+                (
+                    'membership',
+                    models.CharField(
+                        choices=[('B', 'Bronze'), ('S', 'Silver'), ('G', 'Gold')],
+                        default='B',
+                        max_length=1,
+                    ),
+                ),
             ],
             options={
                 'ordering': ['user__first_name'],
@@ -40,11 +47,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Answer',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('answer', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -53,27 +64,43 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Auction',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
-                ('starting_price',
-                 models.DecimalField(decimal_places=2, max_digits=10)),
-                ('current_price',
-                 models.DecimalField(decimal_places=2,
-                                     default=models.DecimalField(
-                                         decimal_places=2, max_digits=10),
-                                     max_digits=10)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'starting_price',
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
+                (
+                    'current_price',
+                    models.DecimalField(
+                        decimal_places=2,
+                        default=models.DecimalField(decimal_places=2, max_digits=10),
+                        max_digits=10,
+                    ),
+                ),
                 ('starting_time', models.DateTimeField()),
                 ('ending_time', models.DateTimeField()),
-                ('auction_status',
-                 models.CharField(choices=[('A', 'Active'), ('C', 'Completed'),
-                                           ('X', 'Cancelled'),
-                                           ('S', 'Schedule'),
-                                           ('D', 'Deleted')],
-                                  default='A',
-                                  max_length=1)),
+                (
+                    'auction_status',
+                    models.CharField(
+                        choices=[
+                            ('A', 'Active'),
+                            ('C', 'Completed'),
+                            ('X', 'Cancelled'),
+                            ('S', 'Schedule'),
+                            ('D', 'Deleted'),
+                        ],
+                        default='A',
+                        max_length=1,
+                    ),
+                ),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
@@ -84,13 +111,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Bid',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
-                ('amount', models.DecimalField(decimal_places=2,
-                                               max_digits=10)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
                 ('status', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -102,11 +132,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Chat',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('message', models.TextField()),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
             ],
@@ -114,11 +148,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Collection',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('title', models.CharField(max_length=30)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
@@ -126,19 +164,30 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Delivery',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
-                ('status',
-                 models.CharField(choices=[('P', 'Pending'), ('S', 'Shipped'),
-                                           ('O', 'Out For Delivery'),
-                                           ('F', 'Failed'), ('D', 'Postpone')],
-                                  default='P',
-                                  max_length=1)),
-                ('tracking_number',
-                 models.CharField(default='T001P', max_length=255)),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'status',
+                    models.CharField(
+                        choices=[
+                            ('P', 'Pending'),
+                            ('S', 'Shipped'),
+                            ('O', 'Out For Delivery'),
+                            ('F', 'Failed'),
+                            ('D', 'Postpone'),
+                        ],
+                        default='P',
+                        max_length=1,
+                    ),
+                ),
+                ('tracking_number', models.CharField(default='T001P', max_length=255)),
                 ('delivery_date', models.DateField(blank=True, null=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -150,17 +199,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Notification',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('message', models.TextField()),
-                ('notification_type',
-                 models.CharField(choices=[('I', 'Info'), ('W', 'Warning'),
-                                           ('E', 'Error')],
-                                  default='I',
-                                  max_length=1)),
+                (
+                    'notification_type',
+                    models.CharField(
+                        choices=[('I', 'Info'), ('W', 'Warning'), ('E', 'Error')],
+                        default='I',
+                        max_length=1,
+                    ),
+                ),
                 ('is_read', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
@@ -168,21 +224,26 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Product',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('title', models.CharField(max_length=255)),
                 ('slug', models.SlugField(unique=True)),
                 ('description', models.TextField(blank=True, null=True)),
-                ('price',
-                 models.DecimalField(
-                     decimal_places=2,
-                     max_digits=10,
-                     validators=[
-                         django.core.validators.MinValueValidator(Decimal('1'))
-                     ])),
+                (
+                    'price',
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=10,
+                        validators=[django.core.validators.MinValueValidator(Decimal('1'))],
+                    ),
+                ),
                 ('in_auction', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -194,15 +255,22 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProductImage',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
-                ('image',
-                 models.ImageField(
-                     upload_to='auction/images',
-                     validators=[src.auction.validators.validate_file_size])),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
+                (
+                    'image',
+                    models.ImageField(
+                        upload_to='auction/images',
+                        validators=[src.auction.validators.validate_file_size],
+                    ),
+                ),
             ],
             options={
                 'ordering': ['product'],
@@ -211,11 +279,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Promotion',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('description', models.CharField(max_length=255)),
                 ('discount', models.FloatField()),
             ],
@@ -223,11 +295,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('question', models.TextField()),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -236,11 +312,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Review',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('description', models.CharField(max_length=255)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
@@ -249,45 +329,61 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Transaction',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('reference_id', models.UUIDField(default=uuid.uuid4)),
                 ('invoice', models.CharField(max_length=255)),
-                ('amount', models.DecimalField(decimal_places=2,
-                                               max_digits=10)),
-                ('transaction_type',
-                 models.CharField(choices=[('D', 'Deposite'), ('B', 'Bid'),
-                                           ('R', 'Refund')],
-                                  max_length=1)),
-                ('transaction_status',
-                 models.CharField(choices=[('C', 'Completed'),
-                                           ('P', 'Pending'),
-                                           ('X', 'Cancelled')],
-                                  max_length=1)),
+                ('amount', models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    'transaction_type',
+                    models.CharField(
+                        choices=[('D', 'Deposite'), ('B', 'Bid'), ('R', 'Refund')],
+                        max_length=1,
+                    ),
+                ),
+                (
+                    'transaction_status',
+                    models.CharField(
+                        choices=[
+                            ('C', 'Completed'),
+                            ('P', 'Pending'),
+                            ('X', 'Cancelled'),
+                        ],
+                        max_length=1,
+                    ),
+                ),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
             name='Wishlist',
             fields=[
-                ('id',
-                 models.UUIDField(default=uuid.uuid4,
-                                  primary_key=True,
-                                  serialize=False)),
+                (
+                    'id',
+                    models.UUIDField(default=uuid.uuid4, primary_key=True, serialize=False),
+                ),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
             name='WishlistItem',
             fields=[
-                ('id',
-                 models.BigAutoField(auto_created=True,
-                                     primary_key=True,
-                                     serialize=False,
-                                     verbose_name='ID')),
+                (
+                    'id',
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID',
+                    ),
+                ),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
             ],
@@ -302,12 +398,15 @@ class Migration(migrations.Migration):
                 ('tole', models.CharField(max_length=255)),
                 ('zip_code', models.CharField(max_length=255)),
                 ('street', models.CharField(max_length=255)),
-                ('customer',
-                 models.OneToOneField(
-                     on_delete=django.db.models.deletion.CASCADE,
-                     primary_key=True,
-                     serialize=False,
-                     to='auction.customer')),
+                (
+                    'customer',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to='auction.customer',
+                    ),
+                ),
             ],
             options={
                 'ordering': ['province'],
@@ -316,13 +415,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserCoin',
             fields=[
-                ('customer',
-                 models.OneToOneField(
-                     on_delete=django.db.models.deletion.CASCADE,
-                     primary_key=True,
-                     related_name='balance',
-                     serialize=False,
-                     to='auction.customer')),
+                (
+                    'customer',
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        related_name='balance',
+                        serialize=False,
+                        to='auction.customer',
+                    ),
+                ),
                 ('balance', models.PositiveIntegerField(default=10000)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),

@@ -16,12 +16,8 @@ class CollectionAdmin(admin.ModelAdmin):
 
     @admin.display(ordering='products_count')
     def products_count(self, collection):
-        url = (
-            reverse('admin:auction_product_changelist')
-            + '?'
-            + urlencode({'collection__id': str(collection.id)})
-        )
-        return format_html('<a href="{}">{}</a>', url, collection.products_count)
+        url = reverse('admin:auction_product_changelist') + '?' + urlencode({'collection__id': str(collection.id)})
+        return format_html("<a href='{}'>{}</a>", url, collection.products_count)
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(products_count=Count('products'))
@@ -33,7 +29,7 @@ class ProductImageInline(admin.TabularInline):
 
     def thumbnail(self, instance):
         if instance.image.name != '':
-            return format_html(f'<img src="{instance.image.url}" class="thumbnail"/>')
+            return format_html(f"<img src='{instance.image.url}' class='thumbnail'/>")
         return ''
 
     class Media:
@@ -72,12 +68,8 @@ class CustomerAdmin(admin.ModelAdmin):
 
     @admin.display(ordering='bids_count')
     def bids(self, customer):
-        url = (
-            reverse('admin:auction_bid_changelist')
-            + '?'
-            + urlencode({'bidder__id': str(customer.id)})
-        )
-        return format_html('<a href="{}">{}</a>', url, customer.bids_count)
+        url = reverse('admin:auction_bid_changelist') + '?' + urlencode({'bidder__id': str(customer.id)})
+        return format_html("<a href='{}'>{}</a>", url, customer.bids_count)
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(bids_count=Count('bid'))

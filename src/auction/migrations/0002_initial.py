@@ -18,16 +18,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='customer',
             name='user',
-            field=models.OneToOneField(
-                on_delete=django.db.models.deletion.CASCADE,
-                to=settings.AUTH_USER_MODEL),
+            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='answer',
             name='customer',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='bid',
@@ -35,49 +31,38 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='bids',
-                to='auction.auction'),
+                to='auction.auction',
+            ),
         ),
         migrations.AddField(
             model_name='bid',
             name='bidder',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='chat',
             name='auction',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.auction'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.auction'),
         ),
         migrations.AddField(
             model_name='chat',
             name='customer',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='delivery',
             name='auction',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.auction'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.auction'),
         ),
         migrations.AddField(
             model_name='delivery',
             name='customer',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='notification',
             name='user',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='product',
@@ -85,14 +70,13 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.PROTECT,
                 related_name='products',
-                to='auction.collection'),
+                to='auction.collection',
+            ),
         ),
         migrations.AddField(
             model_name='product',
             name='customer',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='collection',
@@ -102,14 +86,13 @@ class Migration(migrations.Migration):
                 null=True,
                 on_delete=django.db.models.deletion.SET_NULL,
                 related_name='+',
-                to='auction.product'),
+                to='auction.product',
+            ),
         ),
         migrations.AddField(
             model_name='auction',
             name='product',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.PROTECT,
-                to='auction.product'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='auction.product'),
         ),
         migrations.AddField(
             model_name='productimage',
@@ -117,7 +100,8 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='images',
-                to='auction.product'),
+                to='auction.product',
+            ),
         ),
         migrations.AddField(
             model_name='product',
@@ -127,16 +111,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='auction',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.auction'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.auction'),
         ),
         migrations.AddField(
             model_name='question',
             name='customer',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='answer',
@@ -144,7 +124,8 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='answers',
-                to='auction.question'),
+                to='auction.question',
+            ),
         ),
         migrations.AddField(
             model_name='review',
@@ -152,7 +133,8 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='written_reviews',
-                to='auction.customer'),
+                to='auction.customer',
+            ),
         ),
         migrations.AddField(
             model_name='review',
@@ -160,21 +142,18 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='received_reviews',
-                to='auction.customer'),
+                to='auction.customer',
+            ),
         ),
         migrations.AddField(
             model_name='transaction',
             name='user',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.customer'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.customer'),
         ),
         migrations.AddField(
             model_name='wishlistitem',
             name='auction',
-            field=models.ForeignKey(
-                on_delete=django.db.models.deletion.CASCADE,
-                to='auction.auction'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='auction.auction'),
         ),
         migrations.AddField(
             model_name='wishlistitem',
@@ -182,6 +161,7 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
                 related_name='items',
-                to='auction.wishlist'),
+                to='auction.wishlist',
+            ),
         ),
     ]
