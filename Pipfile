@@ -20,6 +20,7 @@ flower = "*"
 python-dotenv = "*"
 drf-spectacular = "*"
 django-split-settings = "*"
+django-import-export = "*"
 
 [dev-packages]
 flake8 = "*"
@@ -28,13 +29,5 @@ pre-commit = "*"
 [requires]
 python_version = "3.10"
 
-[tool.isort]
-multi_line_output = 5
-line_length = 130
-
-# [tool.yapf]
-# based_on_style = "google"
-# align_closing_bracket_with_visual_indent = true
-# coalesce_brackets = true
-# column_limit = 130
-# dedent_closing_brackets = true
+[tool]
+isort = {multi_line_output = 5, line_length = 130}

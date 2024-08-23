@@ -86,11 +86,13 @@ class ProductViewSet(ModelViewSet):
     def get_serializer_context(self):
         return {'customer_id': self.kwargs['customer_pk']}
 
+    # Custom Action for Bulk Delete
     @action(
         detail=False,
         methods=['post'],
         url_path='bulk-delete',
         serializer_class=BulkDeleteSerializer,
+        permission_classes=[IsProductOwner],
     )
     def bulk_delete(self, request, *args, **kwargs):
 

@@ -2,8 +2,10 @@ from django.contrib import admin
 from django.db.models import Count
 from django.urls import reverse
 from django.utils.html import format_html, urlencode
+from import_export.admin import ImportExportModelAdmin
 
 from . import models
+from .resources import ProductResource
 
 
 @admin.register(models.Collection)
@@ -37,7 +39,7 @@ class ProductImageInline(admin.TabularInline):
 
 
 @admin.register(models.Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ImportExportModelAdmin, admin.ModelAdmin):
     list_display = ['title', 'price', 'collection_title', 'in_auction']
     list_select_related = ['collection']  # For optimization of query
     list_editable = ['price']
@@ -53,6 +55,8 @@ class ProductAdmin(admin.ModelAdmin):
         return product.collection.title
 
     collection_title.short_description = 'Collection'
+
+    resource_class = ProductResource
 
 
 @admin.register(models.Customer)

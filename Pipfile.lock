@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "43c9397e9dc11e90611d3a0fccc29eb58c1c6e5279860418ea0a92e4c903c342"
+            "sha256": "d960d4933508233fce8bd2d6d6e8549cd6a818199672c0ae04134739f3c26ce4"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -314,6 +314,14 @@
             "markers": "python_version >= '3.6'",
             "version": "==0.8.0rc2"
         },
+        "diff-match-patch": {
+            "hashes": [
+                "sha256:953019cdb9c9d2c9e47b5b12bcff3cf4746fc4598eb406076fa1fc27e6a1f15c",
+                "sha256:dce43505fb7b1b317de7195579388df0746d90db07015ed47a85e5e44930ef93"
+            ],
+            "markers": "python_version >= '3.7'",
+            "version": "==20230430"
+        },
         "django": {
             "hashes": [
                 "sha256:848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d",
@@ -349,6 +357,15 @@
             "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==24.3"
+        },
+        "django-import-export": {
+            "hashes": [
+                "sha256:16ecc5a9f0df46bde6eb278a3e65ebda0ee1db55656f36440e9fb83f40ab85a3",
+                "sha256:730ae2443a02b1ba27d8dba078a27ae9123adfcabb78161b4f130843607b3df9"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.8'",
+            "version": "==4.1.1"
         },
         "django-split-settings": {
             "hashes": [
@@ -879,6 +896,14 @@
             "markers": "python_version >= '3.8'",
             "version": "==0.5.1"
         },
+        "tablib": {
+            "hashes": [
+                "sha256:9821caa9eca6062ff7299fa645e737aecff982e6b2b42046928a6413c8dabfd9",
+                "sha256:f6661dfc45e1d4f51fa8a6239f9c8349380859a5bfaa73280645f046d6c96e33"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==3.5.0"
+        },
         "tornado": {
             "hashes": [
                 "sha256:163b0aafc8e23d8cdc3c9dfb24c5368af84a81e3364745ccb4427669bf84aec8",
@@ -1100,6 +1125,16 @@
             ],
             "markers": "python_version >= '3.7'",
             "version": "==20.26.3"
+        }
+    },
+    "tool": {
+        "isort": {
+            "hashes": [
+                "sha256:48fdfcb9face5d58a4f6dde2e72a1fb8dcaf8ab26f95ab49fab84c2ddefb0109",
+                "sha256:8ca5e72a8d85860d5a3fa69b8745237f2939afe12dbf656afbcb47fe72d947a6"
+            ],
+            "markers": "python_full_version >= '3.8.0'",
+            "version": "==5.13.2"
         }
     }
 }

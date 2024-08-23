@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'drf_spectacular',
+    'import_export',
     # Custom Apps
     'src.core',
     'src.auction',
