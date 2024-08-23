@@ -27,26 +27,44 @@ class CollectionViewSet(ModelViewSet):
     serializer_class = CollectionSerializer
     permission_classes = [IsAdminOrReadOnly]
 
-    @action(detail=False, methods=['get'])
-    def retrieve_by_slug(self, request, slug=None):
+    def retrieve(self, request, *args, **kwargs):
+        """
+        Handle both id and slug-based retrievals.
+        """
+        lookup_value = kwargs.get('id') or kwargs.get('slug')
+        lookup_field = 'id' if kwargs.get('id') else 'slug'
+
         try:
-            collection = Collection.objects.annotate(products_count=Count('products')).get(slug=slug)
-            serializer = self.serializer_class(collection)
+            collection = Collection.objects.annotate(products_count=Count('products')).get(**{lookup_field: lookup_value})
+            serializer = self.get_serializer(collection)
             return Response(serializer.data)
         except Collection.DoesNotExist:
             return Response({'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['get'])
-    def retrieve_by_id(self, request, id=None):  # noqa:A002
+    # Put based on id and slug both
+    def update(self, request, *args, **kwargs):
+        lookup_value = kwargs.get('id') or kwargs.get('slug')
+        lookup_field = 'id' if kwargs.get('id') else 'slug'
+
         try:
-            collection = Collection.objects.annotate(products_count=Count('products')).get(pk=id)
-            serializer = self.serializer_class(collection)
+            collection = Collection.objects.get(**{lookup_field: lookup_value})
+            serializer = self.get_serializer(collection, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
             return Response(serializer.data)
         except Collection.DoesNotExist:
             return Response({'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND)
 
     def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+        lookup_value = kwargs.get('id') or kwargs.get('slug')
+        lookup_field = 'id' if kwargs.get('id') else 'slug'
+
+        try:
+            collection = Collection.objects.get(**{lookup_field: lookup_value})
+            collection.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Collection.DoesNotExist:
+            return Response({'detail': 'Collection not found.'}, status=status.HTTP_404_NOT_FOUND)
 
 
 @extend_schema(tags=['Customer Balance'])
@@ -84,7 +102,7 @@ class ProductViewSet(ModelViewSet):
             )
 
     def get_serializer_context(self):
-        return {'customer_id': self.kwargs['customer_pk']}
+        return {'customer_id': self.request.user.id}
 
     # Custom Action for Bulk Delete
     @action(

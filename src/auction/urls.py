@@ -64,12 +64,26 @@ urlpatterns = (
         ),
         path(
             'collections/<int:id>/',
-            CollectionViewSet.as_view({'get': 'retrieve_by_id'}),
+            CollectionViewSet.as_view(
+                {
+                    'get': 'retrieve',
+                    'put': 'update',
+                    'delete': 'destroy',
+                    'patch': 'partial_update',
+                }
+            ),
             name='collection-detail-id',
         ),
         path(
             'collections/<slug:slug>/',
-            CollectionViewSet.as_view({'get': 'retrieve_by_slug'}),
+            CollectionViewSet.as_view(
+                {
+                    'get': 'retrieve',
+                    'put': 'update',
+                    'delete': 'destroy',
+                    'patch': 'partial_update',
+                }
+            ),
             name='collection-detail-slug',
         ),
     ]
