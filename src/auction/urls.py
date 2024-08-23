@@ -44,6 +44,22 @@ answer_router = routers.NestedDefaultRouter(auction_router, 'questions', lookup=
 
 answer_router.register('answers', AuctionAnswerViewSet, basename='question-answers')
 
+
+# Collection Detail Path
+def collection_detail_path(param_type, param_name, name_suffix):
+    return path(
+        f'collections/<{param_type}:{param_name}>/',
+        CollectionViewSet.as_view(
+            {
+                'get': 'retrieve',
+                'put': 'update',
+                'delete': 'destroy',
+            }
+        ),
+        name=f'collection-detail-{name_suffix}',
+    )
+
+
 urlpatterns = (
     [
         path(
@@ -62,30 +78,8 @@ urlpatterns = (
             AuctionViewSet.as_view({'get': 'retrieve_by_slug'}),
             name='auction-detail-slug',
         ),
-        path(
-            'collections/<int:id>/',
-            CollectionViewSet.as_view(
-                {
-                    'get': 'retrieve',
-                    'put': 'update',
-                    'delete': 'destroy',
-                    'patch': 'partial_update',
-                }
-            ),
-            name='collection-detail-id',
-        ),
-        path(
-            'collections/<slug:slug>/',
-            CollectionViewSet.as_view(
-                {
-                    'get': 'retrieve',
-                    'put': 'update',
-                    'delete': 'destroy',
-                    'patch': 'partial_update',
-                }
-            ),
-            name='collection-detail-slug',
-        ),
+        collection_detail_path('int', 'id', 'id'),
+        collection_detail_path('slug', 'slug', 'slug'),
     ]
     + router.urls
     + customer_router.urls
