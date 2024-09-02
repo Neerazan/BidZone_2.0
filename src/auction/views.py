@@ -83,14 +83,12 @@ class ProductViewSet(ModelViewSet):
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
     pagination_class = DefaultPagination
-    permission_classes = [IsProductOwner]
+    permission_classes = [IsAuthenticated]
     search_fields = ['title', 'description', 'collection__title']
     ordering_fields = ['price', 'updated_at']
 
     def get_queryset(self):
-        return (
-            Product.objects.select_related('collection').prefetch_related('images').filter(customer_id=self.kwargs['customer_pk'])
-        )
+        return Product.objects.select_related('collection').prefetch_related('images').filter(customer_id=self.request.user.id)
 
     def destroy(self, request, *args, **kwargs):
         try:
@@ -110,7 +108,7 @@ class ProductViewSet(ModelViewSet):
         methods=['post'],
         url_path='bulk-delete',
         serializer_class=BulkDeleteSerializer,
-        permission_classes=[IsProductOwner],
+        permission_classes=[IsAuthenticated],
     )
     def bulk_delete(self, request, *args, **kwargs):
 
@@ -438,6 +436,7 @@ class TransactionViewSet(ModelViewSet):
     search_fields = ['reference_id', 'invoice']
     ordering_fields = ['created_at']
     filterset_class = TransactionFilter
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Transaction.objects.filter(user_id=self.kwargs['customer_pk'])
+        return Transaction.objects.filter(user_id=self.request.user.id)

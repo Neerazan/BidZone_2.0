@@ -11,8 +11,3 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 class IsUser(permissions.IsAuthenticated):
     def has_object_permission(self, request, view, obj):
         return request.user.id == obj.user_id
-
-
-class IsProductOwner(permissions.IsAuthenticated):
-    def has_object_permission(self, request, view, obj):
-        return request.user.id == obj.customer.user_id

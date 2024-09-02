@@ -10,7 +10,7 @@ DJOSER = {
         'current_user': 'src.core.serializers.UserSerializer',
     },
     'EMAIL': {
-        'activation': 'auction.email.ActivationEmail',
-        'password_reset': 'auction.email.PasswordResetEmail',
+        'activation': 'src.auction.email.ActivationEmail',
+        'password_reset': 'src.auction.email.PasswordResetEmail',
     },
 }

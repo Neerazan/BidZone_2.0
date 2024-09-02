@@ -33,6 +33,7 @@ class ProductSerializer(serializers.ModelSerializer):
     images = ProductImageSerializer(many=True, read_only=True)
     collection = SimpleCollectionSerializer(read_only=True)
     collection_id = serializers.PrimaryKeyRelatedField(queryset=Collection.objects.all(), write_only=True, source='collection')
+    slug = serializers.SlugField(read_only=True)
 
     def validate_product_delete(self, value):
         if Auction.objects.filter(pk=value).exists():
