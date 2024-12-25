@@ -1,166 +1,130 @@
-# BidZone Auction System
+# BidZone - Real-Time Auction System
 
-BidZone is a dynamic auction and bidding platform where users can list products for auction and allow others to bid on them. The bidder with the highest bid within the defined time frame wins the auction. The project implements robust features like user authentication, API documentation, background task processing, and more.
-
----
+BidZone is a sophisticated auction platform built with Django REST Framework that enables users to list products and participate in real-time bidding. The system features JWT authentication, background task processing with Celery, and Redis as a message broker.
 
 ## Features
 
-### Core Features
-- **Product Listings**: Users can list their products for auctions.
-- **Bidding System**: Registered users can place bids on active auctions.
-- **Winner Selection**: Automatically selects the highest bidder as the winner when the auction ends.
-- **API Documentation**: Detailed API documentation using Django Spectacular.
+- **User Authentication**: Secure JWT-based authentication system using Djoser
+- **Real-time Bidding**: Place and track bids on listed products
+- **Product Management**: List and manage products for auction
+- **Background Processing**: Celery-based task queue for handling time-sensitive operations
+- **API Documentation**: Comprehensive API documentation using Django Spectacular
+- **Customer Management**: Handle customer profiles, addresses, and balances
+- **Transaction System**: Secure transaction handling for successful bids
+- **Wishlist**: Allow users to save and track favorite items
+- **Review System**: Product and seller review functionality
+- **Collection Management**: Organize products into collections
 
-### Authentication
-- JWT Authentication powered by Djoser.
-- Secure token-based access to all endpoints.
+## Technology Stack
 
-### Background Tasks
-- Background tasks are managed using **Celery**.
-- **Redis** is used as a message broker for reliable task queuing.
-
-### Storage
-- Static files and media files are organized for easy access and scalability.
-
----
-
-## Project Structure
-
-```
-BidZone
-├── Makefile
-├── Pipfile
-├── Pipfile.lock
-├── celerybeat-schedule
-├── local
-│   └── settings.dev.py
-├── media
-│   └── auction
-│       └── images
-├── pyproject.toml
-├── src
-│   ├── __init__.py
-│   ├── auction
-│   │   ├── admin.py
-│   │   ├── apps.py
-│   │   ├── filters.py
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   ├── tasks.py
-│   │   ├── templates
-│   │   ├── tests.py
-│   │   ├── urls.py
-│   │   └── views.py
-│   ├── bidzone
-│   │   ├── settings
-│   │   ├── urls.py
-│   │   └── wsgi.py
-│   ├── core
-│   │   ├── admin.py
-│   │   ├── models.py
-│   │   ├── serializers.py
-│   │   └── views.py
-│   ├── manage.py
-│   └── utils
-│       └── slugs.py
-└── static
-    ├── admin
-    ├── auction
-    ├── debug_toolbar
-    └── rest_framework
-```
-
----
-
-## Requirements
-
-- Python 3.10+
-- Django
-- Pipenv
-- Redis
-- Celery
-
----
+- **Backend Framework**: Django REST Framework
+- **Authentication**: JWT (Djoser)
+- **Task Queue**: Celery
+- **Message Broker**: Redis
+- **API Documentation**: Django Spectacular
 
 ## Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/BidZone.git
-   cd BidZone
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   make install
-   ```
-
-3. **Setup environment variables:**
-   Create a `.env` file with the required configurations.
-
-4. **Run migrations:**
-   ```bash
-   make migrate
-   ```
-
-5. **Run the development server:**
-   ```bash
-   make run
-   ```
-
-6. **Start Celery worker:**
-   ```bash
-   celery -A src worker --loglevel=info
-   ```
-
-7. **Start Redis server:**
-   Ensure Redis is running locally or on a remote server.
-
----
-
-## API Documentation
-
-- The API documentation is accessible at `/api/schema/swagger-ui/`.
-- The documentation is generated using **Spectacular Settings**:
-
-  ```python
-  SPECTACULAR_SETTINGS = {
-      'TITLE': 'BidZone API',
-      'DESCRIPTION': 'API documentation of BidZone',
-      'VERSION': '1.0.0',
-      'TAGS': [
-          {'name': 'Auction', 'description': 'Auction related endpoints'},
-          {'name': 'Bids', 'description': 'Auction bids related endpoints'},
-          {'name': 'Customer', 'description': 'Customer related endpoints'},
-          ...
-      ],
-  }
-  ```
-
----
-
-## Usage
-
-### Create a New App
+1. Clone the repository:
 ```bash
-make app name=<app_name>
+git clone <repository-url>
+cd BidZone_2.0
 ```
 
-### Run Pre-commit Checks
+2. Install dependencies:
 ```bash
-make lint
+make install
 ```
 
-### Collect Static Files
+3. Install pre-commit hooks:
+```bash
+make install-pre-commit
+```
+
+4. Set up the database:
+```bash
+make migrations
+make migrate
+```
+
+5. Create a superuser:
+```bash
+make superuser
+```
+
+6. Collect static files:
 ```bash
 make collectstatic
 ```
 
----
+7. Start the development server:
+```bash
+make run
+```
+
+## Project Structure
+
+```
+.
+├── src/
+│   ├── auction/          # Main auction functionality
+│   ├── bidzone/          # Project configuration
+│   ├── core/             # Core functionality
+│   ├── playground/       # Testing and development area
+│   ├── slider/           # Slider management
+│   ├── tags/             # Tagging system
+│   └── utils/            # Utility functions
+├── static/               # Static files
+├── media/                # User-uploaded files
+└── local/                # Local development settings
+```
+
+## API Endpoints
+
+The API is thoroughly documented using Django Spectacular. Major endpoint categories include:
+
+- Auction Management
+- Bidding Operations
+- Customer Management
+- Product Management
+- Transaction Processing
+- Collection Management
+- Review System
+- Wishlist Operations
+
+View the complete API documentation at `/api/schema/swagger-ui/` when running the server.
+
+## Development
+
+### Available Make Commands
+
+- `make install`: Install project dependencies
+- `make run`: Start the development server
+- `make migrate`: Apply database migrations
+- `make migrations`: Generate new migrations
+- `make lint`: Run linting checks
+- `make shell`: Access Django shell
+- `make update`: Install dependencies and apply migrations
+- `make app name=<app_name>`: Create a new Django app
+- `make flush`: Flush the database
+
+### Background Tasks
+
+The project uses Celery for handling background tasks such as:
+- Auction completion processing
+- Email notifications
+- Scheduled maintenance tasks
+
+Make sure Redis is running and Celery worker is started before testing background tasks.
+
+## Contributing
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License.
-
----
+[Add your license information here]

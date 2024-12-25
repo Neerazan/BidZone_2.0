@@ -6,8 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
-# settings file
-local/settings.dev.py
+# Ignore all files in local directory
+local/*
+
+# Keep the local directory itself
+!local/.gitkeep
 
 # Distribution / packaging
 .Python
