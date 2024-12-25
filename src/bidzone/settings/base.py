@@ -9,7 +9,7 @@ DEBUG = False
 SECRET_KEY = NotImplemented if DEBUG else config('SECRET_KEY')
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 
 # Application definition
