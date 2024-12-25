@@ -21,6 +21,9 @@ python-dotenv = "*"
 drf-spectacular = "*"
 django-split-settings = "*"
 django-import-export = "*"
+gunicorn = "*"
+python-decouple = "*"
+pre-commit = "*"
 
 [dev-packages]
 flake8 = "*"

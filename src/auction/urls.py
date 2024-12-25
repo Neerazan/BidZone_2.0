@@ -34,7 +34,7 @@ wishlists_router.register('items', WishlistItemViewSet, basename='cart-items')
 
 auction_router = routers.NestedDefaultRouter(router, 'auctions', lookup='auction')
 
-auction_router.register('chats', AuctionChatViewSet, basename='auction-chats')
+# auction_router.register('chats', AuctionChatViewSet, basename='auction-chats')
 
 auction_router.register('bids', BidsViewSet, basename='auction-bids')
 

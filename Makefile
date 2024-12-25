@@ -39,9 +39,19 @@ superuser:
 	python -m src.manage createsuperuser
 
 
+.PHONY: collectstatic
+collectstatic:
+	python -m src.manage collectstatic
+
+
 .PHONY: update
 update: install migrate;
 	@echo "Update Completed..."
+
+
+.PHONY: flush
+flush:
+	python -m src.manage flush
 
 
 .PHONY: app

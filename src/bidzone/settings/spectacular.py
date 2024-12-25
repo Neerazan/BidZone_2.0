@@ -5,7 +5,7 @@ SPECTACULAR_SETTINGS = {
     'SERVE_INCLUDE_SCHEMA': False,
     'TAGS': [
         {'name': 'Auction', 'description': 'Auction related endpoints'},
-        {'name': 'Auction Chat', 'description': 'Auction Chat related endpoints'},
+        # {'name': 'Auction Chat', 'description': 'Auction Chat related endpoints'},
         {'name': 'Auction Question', 'description': 'Auction Question related endpoints'},
         {'name': 'Auction Answer', 'description': 'Auction Answer related endpoints'},
         {'name': 'Bids', 'description': 'Auction bids related endpoints'},
