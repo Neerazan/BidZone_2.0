@@ -27,7 +27,7 @@ BidZone is a sophisticated auction platform built with Django REST Framework tha
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:Neerazan/BidZone_2.0.git
 cd BidZone_2.0
 ```
 
@@ -41,23 +41,34 @@ make install
 make install-pre-commit
 ```
 
-4. Set up the database:
+4. Set up development settings:
+```bash
+cp src/bidzone/settings/templates/settings.dev.py local/
+```
+
+5. Configure your development settings:
+   - Open `local/settings.dev.py`
+   - Set your `SECRET_KEY`
+   - Configure `DEBUG` setting
+   - Adjust other settings as needed
+
+6. Set up the database:
 ```bash
 make migrations
 make migrate
 ```
 
-5. Create a superuser:
+7. Create a superuser:
 ```bash
 make superuser
 ```
 
-6. Collect static files:
+8. Collect static files:
 ```bash
 make collectstatic
 ```
 
-7. Start the development server:
+9. Start the development server:
 ```bash
 make run
 ```
@@ -116,15 +127,3 @@ The project uses Celery for handling background tasks such as:
 - Scheduled maintenance tasks
 
 Make sure Redis is running and Celery worker is started before testing background tasks.
-
-## Contributing
-
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-[Add your license information here]
