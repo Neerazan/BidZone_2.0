@@ -1,4 +1,4 @@
-# BidZone - Real-Time Auction System
+# BidZone - Auction System
 
 BidZone is a sophisticated auction platform built with Django REST Framework that enables users to list products and participate in real-time bidding. The system features JWT authentication, background task processing with Celery, and Redis as a message broker.
 
