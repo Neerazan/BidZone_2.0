@@ -2,11 +2,12 @@ import os
 
 from decouple import config
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = NotImplemented
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = NotImplemented if DEBUG else config('SECRET_KEY')
+
 
 ALLOWED_HOSTS = []
 

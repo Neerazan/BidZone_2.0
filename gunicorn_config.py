@@ -9,7 +9,6 @@ pythonpath = os.path.join(base_dir, 'src')
 # Server socket
 bind = '0.0.0.0:8000'
 workers = multiprocessing.cpu_count() * 2 + 1
-print(f'workers: {workers}')
 
 # Logging
 accesslog = os.path.join(base_dir, 'logs/access.log')
