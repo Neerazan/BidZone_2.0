@@ -24,6 +24,7 @@ django-import-export = "*"
 gunicorn = "*"
 python-decouple = "*"
 pre-commit = "*"
+whitenoise = "*"
 
 [dev-packages]
 flake8 = "*"
