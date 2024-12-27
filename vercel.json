@@ -24,6 +24,11 @@
         }
     ],
     "env": {
-        "PYTHONPATH": "src"
+        "PYTHONPATH": "src",
+        "DJANGO_SETTINGS_MODULE": "bidzone.settings",
+        "EMAIL_PASSWORD": "@EMAIL_PASSWORD",
+        "DEBUG": "False",
+        "ALLOWED_HOSTS": "*",
+        "SECRET_KEY": "@SECRET_KEY"
     }
 }
