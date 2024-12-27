@@ -22,5 +22,8 @@
             "src": "/(.*)",
             "dest": "src/bidzone/wsgi.py"
         }
-    ]
+    ],
+    "env": {
+        "PYTHONPATH": "src"
+    }
 }
