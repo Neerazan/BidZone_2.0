@@ -25,6 +25,7 @@ gunicorn = "*"
 python-decouple = "*"
 pre-commit = "*"
 whitenoise = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 flake8 = "*"
